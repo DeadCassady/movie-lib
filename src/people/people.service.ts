@@ -35,9 +35,7 @@ export class PeopleService {
       where: { name: createPersonDto.homeworld }
     }).then((data) => {
       if (!data) {
-        const p = new Planet();
-        p.name = createPersonDto.homeworld
-        return this.planetRepository.save(p)
+        return createPersonDto.homeworld
       } else {
         return data;
       }
@@ -48,9 +46,7 @@ export class PeopleService {
         where: { name: DTO }
       }).then((data) => {
         if (!data) {
-          const v = new Vehicle()
-          v.name = DTO
-          return this.vehicleRepository.save(v)
+          return DTO
         } else {
           return data
         }
@@ -62,9 +58,7 @@ export class PeopleService {
         where: { name: DTO }
       }).then((data) => {
         if (!data) {
-          const s = new Starship()
-          s.name = DTO
-          return this.starshipRepository.save(s)
+          return DTO
         } else {
           return data
         }
@@ -76,9 +70,7 @@ export class PeopleService {
         where: { name: DTO }
       }).then((data) => {
         if (!data) {
-          const s = new Specie()
-          s.name = DTO
-          return this.speciesRepository.save(s)
+          return DTO
         } else {
           return data
         }
@@ -90,21 +82,20 @@ export class PeopleService {
         where: { title: DTO }
       }).then((data) => {
         if (!data) {
-          const s = new Film()
-          s.title = DTO
-          return this.filmsRepository.save(s)
+          return DTO
         } else {
           return data
         }
       })
     })
 
-    Object.assign(person, { homeworld: planet, vehicles: vehicles, starships: starships, species: species, films: films })
+    Object.assign(person, createPersonDto, { homeworld: planet, vehicles: vehicles, starships: starships, species: species, films: films })
 
     return this.peopleRepository.save(person);
   }
 
   findAll(): Promise<Person[]> {
+
     return this.peopleRepository.find();
   }
 
@@ -119,9 +110,8 @@ export class PeopleService {
 
   async update(id: number, updatePersonDto: UpdatePersonDto): Promise<Person> {
     const obj = this.transform(updatePersonDto)
-    const o = {
-      name: "Luke"
-    }
+    const person = new transformPersonDto()
+    Object.assign(person, obj)
     await this.peopleRepository.update(id, obj);
     return this.findOne(id);
   }
@@ -135,9 +125,7 @@ export class PeopleService {
       })
         .then((data) => {
           if (!data) {
-            const p = new Planet();
-            p.name = dto.homeworld || '';
-            return this.planetRepository.save(p)
+return dto.homeworld || '';
           } else {
             return data;
           }
@@ -149,9 +137,7 @@ export class PeopleService {
         where: { name: DTO }
       }).then((data) => {
         if (!data) {
-          const v = new Vehicle()
-          v.name = DTO
-          return this.vehicleRepository.save(v)
+          return DTO
         } else {
           return data
         }
@@ -163,9 +149,7 @@ export class PeopleService {
         where: { name: DTO }
       }).then((data) => {
         if (!data) {
-          const s = new Starship()
-          s.name = DTO
-          return this.starshipRepository.save(s)
+          return DTO
         } else {
           return data
         }
@@ -177,9 +161,7 @@ export class PeopleService {
         where: { name: DTO }
       }).then((data) => {
         if (!data) {
-          const s = new Specie()
-          s.name = DTO
-          return this.speciesRepository.save(s)
+          return DTO
         } else {
           return data
         }
@@ -191,9 +173,7 @@ export class PeopleService {
         where: { title: DTO }
       }).then((data) => {
         if (!data) {
-          const s = new Film()
-          s.title = DTO
-          return this.filmsRepository.save(s)
+          return DTO
         } else {
           return data
         }
