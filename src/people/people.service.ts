@@ -9,6 +9,7 @@ import { Vehicle } from 'src/vehicles/entities/vehicle.entity';
 import { Starship } from 'src/starships/entities/starship.entity';
 import { Specie } from 'src/species/entities/species.entity';
 import { Film } from 'src/films/entities/film.entity';
+import { TransformPersonDto } from './dto/transform-person.dto';
 
 @Injectable()
 export class PeopleService {
@@ -88,7 +89,7 @@ export class PeopleService {
         }
       })
     })
-
+Promise.all([planet, vehicles, starships, species, films])
     Object.assign(person, createPersonDto, { homeworld: planet, vehicles: vehicles, starships: starships, species: species, films: films })
 
     return this.peopleRepository.save(person);
@@ -110,14 +111,14 @@ export class PeopleService {
 
   async update(id: number, updatePersonDto: UpdatePersonDto): Promise<Person> {
     const obj = this.transform(updatePersonDto)
-    const person = new transformPersonDto()
+    const person = new TransformPersonDto()
     Object.assign(person, obj)
     await this.peopleRepository.update(id, obj);
     return this.findOne(id);
   }
 
   async transform(dto: UpdatePersonDto) {
-    let planet: Planet | undefined
+    let planet: Planet | string | undefined
 
     if (dto.homeworld) {
       planet = await this.planetRepository.findOne({
@@ -125,7 +126,7 @@ export class PeopleService {
       })
         .then((data) => {
           if (!data) {
-return dto.homeworld || '';
+            return dto.homeworld || '';
           } else {
             return data;
           }
@@ -179,6 +180,8 @@ return dto.homeworld || '';
         }
       })
     })
+
+    Promise.all([planet, films, species, vehicles, starships]);
 
     const newObj = {
       name: dto.name || undefined,

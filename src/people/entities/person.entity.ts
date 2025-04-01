@@ -14,16 +14,11 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { CreatePersonDto } from '../dto/create-person.dto';
-import { UpdatePersonDto } from '../dto/update-person.dto';
 
 const url = 'http://localhost:3000/api#/people/'
 
 @Entity()
 export class Person {
-  private constructor(dto: CreatePersonDto | UpdatePersonDto) {
-
-  }
   @ApiProperty({ description: 'This is the person id', nullable: false })
   @PrimaryGeneratedColumn()
   id: number;
@@ -53,19 +48,19 @@ export class Person {
   gender: string;
   @ApiProperty({ description: 'A home planet', nullable: false })
   @ManyToOne(() => Planet, (planet) => planet.residents)
-  homeworld: Planet;
+  homeworld: Planet | string;
   @ApiProperty({ description: 'This is the films that the person has been in', nullable: false })
   @ManyToMany(() => Film, (film) => film.characters, { cascade: true })
   @JoinTable()
-  films: Film[];
+  films: (Film | string)[];
   @ApiProperty({ description: 'This is the species', nullable: false })
   @ManyToMany(() => Specie, (specie) => specie.people, { cascade: true })
   @JoinTable()
-  species: Specie[];
+  species: (Specie | string)[];
   @ApiProperty({ description: 'These are the vehicles', nullable: false })
   @ManyToMany(() => Vehicle, (vehicle) => vehicle.pilots, { cascade: true })
   @JoinTable()
-  vehicles: Vehicle[];
+  vehicles: (Vehicle | string)[];
   @ApiProperty({ description: 'A list of starships', nullable: false })
   @ManyToMany(() => Starship, (starship) => starship.pilots, { cascade: true })
   @JoinTable()
