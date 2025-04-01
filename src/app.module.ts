@@ -14,8 +14,6 @@ import { PeopleService } from './people/people.service';
 import { StarshipsService } from './starships/starships.service';
 
 @Module({
-  controllers: [],
-  providers: [FilmsService, VehiclesService, SpeciesService, PeopleService, StarshipsService, FilmsModule],
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',

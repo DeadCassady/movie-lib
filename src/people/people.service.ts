@@ -113,7 +113,7 @@ Promise.all([planet, vehicles, starships, species, films])
     const obj = this.transform(updatePersonDto)
     const person = new TransformPersonDto()
     Object.assign(person, obj)
-    await this.peopleRepository.update(id, obj);
+    await this.peopleRepository.update(id, person);
     return this.findOne(id);
   }
 
