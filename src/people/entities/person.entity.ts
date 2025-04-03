@@ -63,7 +63,7 @@ export class Person {
   @ApiProperty({ description: 'A list of starships', nullable: false })
   @ManyToMany(() => Starship, (starship) => starship.pilots, { cascade: true })
   @JoinTable()
-  starships: Starship[];
+  starships: (Starship | string)[];
   @ApiProperty({ description: 'This is when the character was created', nullable: false })
   @Column()
   created: Date;

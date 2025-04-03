@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
+import { Film } from 'src/films/entities/film.entity';
 import { Person } from 'src/people/entities/person.entity';
 import {
   Column,
@@ -57,16 +58,11 @@ export class Starship {
   @Column()
   starship_class: string;
   @ApiProperty({ description: 'Note identifier', nullable: false })
-  @ManyToMany(() => Person, (person) => person.url)
-  @JoinTable({
-    name: 'starship_pilots',
-    joinColumn: { name: 'starship_pilots', referencedColumnName: 'url' },
-    inverseJoinColumn: { name: 'person_url', referencedColumnName: 'url' },
-  })
-  pilots: Person[];
+  @ManyToMany(() => Person, (person) => person.starships)
+  pilots: (Person | string)[];
   @ApiProperty({ description: 'This is the array of films', nullable: false })
-  @Column({ type: 'text', array: true })
-  films: string[];
+  @ManyToMany(() => Film, (film) => film.starships)
+  films: (Film | string)[];
   @ApiProperty({ description: 'Note identifier', nullable: false })
   @Column()
   created: Date;
