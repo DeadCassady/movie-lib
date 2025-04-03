@@ -89,7 +89,8 @@ export class PeopleService {
         }
       })
     })
-Promise.all([planet, vehicles, starships, species, films])
+    Promise.all([planet, vehicles, starships, species, films])
+    console.log(planet)
     Object.assign(person, createPersonDto, { homeworld: planet, vehicles: vehicles, starships: starships, species: species, films: films })
 
     return this.peopleRepository.save(person);

@@ -51,7 +51,6 @@ export class Person {
   homeworld: Planet | string;
   @ApiProperty({ description: 'This is the films that the person has been in', nullable: false })
   @ManyToMany(() => Film, (film) => film.characters, { cascade: true })
-  @JoinTable()
   films: (Film | string)[];
   @ApiProperty({ description: 'This is the species', nullable: false })
   @ManyToMany(() => Specie, (specie) => specie.people, { cascade: true })

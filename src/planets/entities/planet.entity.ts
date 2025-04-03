@@ -1,7 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
+import { Film } from 'src/films/entities/film.entity';
 import { Person } from 'src/people/entities/person.entity';
-import { AfterLoad, Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { AfterLoad, Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 const url = 'http://localhost:3000/api#/planets/'
 
@@ -39,10 +40,10 @@ export class Planet {
   population: number;
   @ApiProperty({ description: 'Note identifier', nullable: false })
   @OneToMany(() => Person, (person) => person.homeworld)
-  residents: Person[];
+  residents: (Person | string)[];
   @ApiProperty({ description: 'Note identifier', nullable: false })
-  @Column({ type: 'text', array: true })
-  films: string[];
+  @ManyToMany(() => Film, (film) => film.planets)
+  films: (Film | string)[];
   @ApiProperty({ description: 'Note identifier', nullable: false })
   @Column()
   created: Date;

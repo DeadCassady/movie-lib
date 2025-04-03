@@ -7,9 +7,7 @@ import {
   AfterLoad,
   Column,
   Entity,
-  JoinColumn,
   ManyToMany,
-  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -27,25 +25,19 @@ export class Specie {
   @ApiProperty({ description: "This is the specie's classification", nullable: false })
   @Column()
   classification: string
-
   @ApiProperty({ description: 'This is the homeworld of the specie', nullable: false })
-  @ManyToOne(() => Planet, (planet) => planet.url)
-  @JoinColumn()
-  homeworld: Planet;
-
+  @Column()
+  homeworld: (Planet | string);
   @ApiProperty({ description: "This is the specie's language", nullable: false })
   @Column()
   language: string;
   @ApiProperty({ description: 'The number of people of the given specie', nullable: false })
-  @OneToMany(() => Person, (person) => person.url)
-  @JoinColumn({ name: 'name' })
-  people: Person[];
+  @OneToMany(() => Person, (person) => person.species)
+  people: (Person | string)[];
   @ApiProperty({ description: 'The number of people of the given specie', nullable: false })
-  @ManyToMany(() => Film, (film) => film.url, { cascade: true })
-  @JoinColumn({ name: 'name' })
+  @ManyToMany(() => Film, (film) => film.species)
   films: Film[];
   @ApiProperty({ description: 'This is when the this is when the entry was created', nullable: false })
-
   @Column()
   created: Date;
   @ApiProperty({ description: 'This is when the entry was changed', nullable: false })

@@ -10,6 +10,7 @@ import {
   Column,
   Entity,
   JoinColumn,
+  JoinTable,
   ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
@@ -41,22 +42,25 @@ export class Film {
   @Column()
   release_date: string;
   @ApiProperty({ description: 'A list of characters in the film', nullable: false })
-  @ManyToOne(() => Person, (person) => person.url, { cascade: true })
-  @JoinColumn({ name: 'name' })
-  characters: Person[];
+  @ManyToMany(() => Person, (person) => person.films)
+  @JoinTable()
+  characters: (Person | string)[];
   @ApiProperty({ description: 'A number of planets that appear in the movie', nullable: false })
-  @ManyToOne(() => Planet, (planet) => planet.url, { cascade: true })
-  @JoinColumn({ name: 'name' })
-  planets: Planet[];
+  @ManyToMany(() => Planet, (planet) => planet.films, { cascade: true })
+  @JoinTable()
+  planets: (Planet | string)[];
   @ApiProperty({ description: 'A list of starships that appear in the film', nullable: false })
-  @ManyToMany(() => Starship, (starship) => starship.url)
-  starships: Starship[];
+  @ManyToMany(() => Starship, (starship) => starship.films)
+  @JoinTable()
+  starships: (Starship | string)[];
   @ApiProperty({ description: 'A list of vehicles that appear in the film', nullable: false })
-  @Column({ type: 'text', array: true })
-  vehicles: Vehicle[];
+  @ManyToMany(() => Vehicle, (vehicle) => vehicle.films)
+  @JoinTable()
+  vehicles: (Vehicle | string)[];
   @ApiProperty({ description: 'These are the species that appear in the movie', nullable: false })
-  @Column({ type: 'text', array: true })
-  species: Specie[];
+  @ManyToMany(() => Specie, (specie) => specie.films)
+  @JoinTable()
+  species: (Specie | string)[];
   @ApiProperty({ description: 'This is when the this is when the entry was created', nullable: false })
   @Column()
   created: Date;
