@@ -7,12 +7,10 @@ import { Specie } from "src/species/entities/species.entity";
 import { Starship } from "src/starships/entities/starship.entity";
 import { Vehicle } from "src/vehicles/entities/vehicle.entity";
 import { DataLoaderService } from "./data-loader.service";
-import { DataLoaderController } from "./data-loader.controller";
 
 
 @Module({
   imports: [TypeOrmModule.forFeature([Person, Planet, Starship, Vehicle, Specie, Film])],
-  controllers: [DataLoaderController],
   providers: [DataLoaderService],
 })
 export class DataLoaderModule { }

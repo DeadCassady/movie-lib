@@ -88,7 +88,6 @@ export class DataLoaderService implements OnApplicationBootstrap {
         }
       })
       Object.assign(person, data, { homeworld })
-      // console.log(`${person.name} from ${person.homeworld?.name} with name: ${homeworld?.name}`)
       return this.personRepository.save(person)
     }))
     console.log(`Initialized ${peopleEntities.length} people`)
