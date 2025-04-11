@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { CreatePersonDto } from './dto/create-person.dto';
 import { UpdatePersonDto } from './dto/update-person.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -30,71 +30,74 @@ export class PeopleService {
 
   async create(createPersonDto: CreatePersonDto) {
     const person = new Person();
+    person.created = new Date()
 
-
+    Object.assign(person, createPersonDto)
     const planet = await this.planetRepository.findOne({
       where: { name: createPersonDto.homeworld }
     }).then((data) => {
       if (!data) {
-        return createPersonDto.homeworld
+        throw new NotFoundException(`Planet ${createPersonDto.homeworld} was not found`)
       } else {
         return data;
       }
     })
 
-    const vehicles = createPersonDto.vehicles.map(async (DTO) => {
+    const vehicles = await Promise.all(createPersonDto.vehicles.map(async (DTO) => {
       return await this.vehicleRepository.findOne({
         where: { name: DTO }
       }).then((data) => {
         if (!data) {
-          return DTO
+          throw new NotFoundException(`Vehicle ${DTO} was not found`)
         } else {
           return data
         }
       })
-    })
+    }))
 
-    const starships = createPersonDto.starships.map(async (DTO) => {
+    const starships = await Promise.all(createPersonDto.starships.map(async (DTO) => {
       return await this.starshipRepository.findOne({
         where: { name: DTO }
       }).then((data) => {
         if (!data) {
-          return DTO
+          throw new NotFoundException(`Starship ${DTO} was not found`)
         } else {
           return data
         }
       })
-    })
+    }))
 
-    const species = createPersonDto.species.map(async (DTO) => {
+    const species = await Promise.all(createPersonDto.species.map(async (DTO) => {
       return await this.speciesRepository.findOne({
         where: { name: DTO }
       }).then((data) => {
         if (!data) {
-          return DTO
+          throw new NotFoundException(`Specie ${DTO} was not found`)
         } else {
           return data
         }
       })
-    })
+    }))
 
-    const films = createPersonDto.films.map(async (DTO) => {
+    const films = await Promise.all(createPersonDto.films.map(async (DTO) => {
       return await this.filmsRepository.findOne({
         where: { title: DTO }
       }).then((data) => {
         if (!data) {
-          return DTO
+          throw new NotFoundException(`Film ${DTO} was not found`)
         } else {
           return data
         }
       })
-    })
-    Promise.all([planet, vehicles, starships, species, films])
-    console.log(planet)
-    Object.assign(person, createPersonDto, { homeworld: planet, vehicles: vehicles, starships: starships, species: species, films: films })
-
-    return this.peopleRepository.save(person);
+    }))
+    try {
+      Object.assign(person, { homeworld: planet, vehicles, starships, species, films })
+      return this.peopleRepository.save(person);
+    } catch (error) {
+      throw new InternalServerErrorException("Failed to create a new person")
+    }
   }
+
 
   findAll(): Promise<Person[]> {
 
@@ -114,12 +117,17 @@ export class PeopleService {
     const obj = this.transform(updatePersonDto)
     const person = new TransformPersonDto()
     Object.assign(person, obj)
-    await this.peopleRepository.update(id, person);
-    return this.findOne(id);
+    try {
+      await this.peopleRepository.update(id, person);
+      return this.findOne(id);
+    } catch (error) {
+
+      throw new InternalServerErrorException(`Was not able to update the person with ID ${id}`)
+    }
   }
 
   async transform(dto: UpdatePersonDto) {
-    let planet: Planet | string | undefined
+    let planet: Planet | undefined
 
     if (dto.homeworld) {
       planet = await this.planetRepository.findOne({
@@ -127,7 +135,7 @@ export class PeopleService {
       })
         .then((data) => {
           if (!data) {
-            return dto.homeworld || '';
+            throw new NotFoundException(`The planet ${dto.homeworld} was not found`)
           } else {
             return data;
           }
@@ -139,7 +147,7 @@ export class PeopleService {
         where: { name: DTO }
       }).then((data) => {
         if (!data) {
-          return DTO
+          throw new NotFoundException(`The vehicle ${DTO} was not found`)
         } else {
           return data
         }
@@ -151,7 +159,7 @@ export class PeopleService {
         where: { name: DTO }
       }).then((data) => {
         if (!data) {
-          return DTO
+          throw new NotFoundException(`The starship ${DTO} was not found`)
         } else {
           return data
         }
@@ -163,7 +171,7 @@ export class PeopleService {
         where: { name: DTO }
       }).then((data) => {
         if (!data) {
-          return DTO
+          throw new NotFoundException(`The specie ${DTO} was not found`)
         } else {
           return data
         }
@@ -175,7 +183,7 @@ export class PeopleService {
         where: { title: DTO }
       }).then((data) => {
         if (!data) {
-          return DTO
+          throw new NotFoundException(`The specie ${DTO} was not found`)
         } else {
           return data
         }

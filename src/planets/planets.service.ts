@@ -1,20 +1,56 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { CreatePlanetDto } from './dto/create-planet.dto';
 import { UpdatePlanetDto } from './dto/update-planet.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Planet } from './entities/planet.entity';
 import { Repository } from 'typeorm';
+import { Person } from 'src/people/entities/person.entity';
+import { Film } from 'src/films/entities/film.entity';
 
 @Injectable()
 export class PlanetsService {
   constructor(
     @InjectRepository(Planet)
     private planetsRepository: Repository<Planet>,
+    @InjectRepository(Person)
+    private peopleRepository: Repository<Person>,
+    @InjectRepository(Film)
+    private filmsRepository: Repository<Film>,
   ) { }
 
-  create(createPlanetDto: CreatePlanetDto): Promise<Planet> {
-    const planet = this.planetsRepository.create(createPlanetDto);
-    return this.planetsRepository.save(planet);
+  async create(createPlanetDto: CreatePlanetDto): Promise<Planet> {
+    const planet = new Planet()
+    Object.assign(planet, createPlanetDto)
+
+    const people = await Promise.all(createPlanetDto.residents.map(async (DTO) => {
+      return await this.peopleRepository.findOne({
+        where: { name: DTO }
+      }).then((data) => {
+        if (!data) {
+          throw new NotFoundException(`Person ${DTO} was not found`)
+        } else {
+          return data
+        }
+      })
+    }))
+    const films = await Promise.all(createPlanetDto.films.map(async (DTO) => {
+      return await this.filmsRepository.findOne({
+        where: { title: DTO }
+      }).then((data) => {
+        if (!data) {
+          throw new NotFoundException(`Film ${DTO} was not found`)
+        } else {
+          return data
+        }
+      })
+    }))
+
+    try {
+      Object.assign(planet, { residents: people, films })
+      return this.planetsRepository.save(planet);
+    } catch (error) {
+      throw new InternalServerErrorException("Failed to create a new starship")
+    }
   }
 
   findAll(): Promise<Planet[]> {
@@ -30,7 +66,6 @@ export class PlanetsService {
   }
 
   async update(id: number, updatePlanetDto: UpdatePlanetDto): Promise<Planet> {
-    await this.planetsRepository.update(id, updatePlanetDto);
     return this.findOne(id);
   }
 

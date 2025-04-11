@@ -7,9 +7,10 @@ import {
   AfterLoad,
   Column,
   Entity,
+  JoinColumn,
   ManyToMany,
+  ManyToOne,
   OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -27,17 +28,18 @@ export class Specie {
   @Column()
   classification: string
   @ApiProperty({ description: 'This is the homeworld of the specie', nullable: false })
-  @OneToOne(() => Planet)
-  homeworld: (Planet | string);
+  @ManyToOne(() => Planet, { nullable: true })
+  @JoinColumn()
+  homeworld: Planet | null;
   @ApiProperty({ description: "This is the specie's language", nullable: false })
   @Column()
   language: string;
   @ApiProperty({ description: 'The number of people of the given specie', nullable: false })
   @OneToMany(() => Person, (person) => person.species)
-  people: (Person | string)[];
+  people: Person[];
   @ApiProperty({ description: 'The number of people of the given specie', nullable: false })
   @ManyToMany(() => Film, (film) => film.species)
-  films: (Film | string)[];
+  films: Film[];
   @ApiProperty({ description: 'This is when the this is when the entry was created', nullable: false })
   @Column()
   created: Date;

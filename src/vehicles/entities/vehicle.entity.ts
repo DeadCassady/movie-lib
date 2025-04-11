@@ -5,7 +5,6 @@ import { Person } from 'src/people/entities/person.entity';
 import {
   Column,
   Entity,
-  JoinTable,
   ManyToMany,
   PrimaryGeneratedColumn,
   AfterLoad,
@@ -29,22 +28,22 @@ export class Vehicle {
   manufacturer: string;
   @ApiProperty({ description: 'This is the cost of the vehicle', nullable: false })
   @Column()
-  cost_in_credits: number;
+  cost_in_credits: string;
   @ApiProperty({ description: 'This is the length of the vehicle', nullable: false })
   @Column()
-  length: number;
+  length: string;
   @ApiProperty({ description: 'This is the max speed', nullable: false })
   @Column()
   max_atmosphering_speed: string;
   @ApiProperty({ description: 'This is the number of people', nullable: false })
   @Column()
-  crew: number;
+  crew: string;
   @ApiProperty({ description: 'This is the number of passengers on the ship', nullable: false })
   @Column()
-  passengers: number;
+  passengers: string;
   @ApiProperty({ description: 'This is the cargo capacity', nullable: false })
   @Column()
-  cargo_capacity: number;
+  cargo_capacity: string;
   @ApiProperty({ description: `This is the number of years that the ship won't run out of the consumables`, nullable: false })
   @Column()
   consumables: string;
@@ -53,10 +52,10 @@ export class Vehicle {
   vehicle_class: string;
   @ApiProperty({ description: 'Note identifier', nullable: false })
   @ManyToMany(() => Person, (person) => person.vehicles)
-  pilots: (Person | string)[];
+  pilots: Person[];
   @ApiProperty({ description: 'This is the array of films', nullable: false })
   @ManyToMany(() => Film, (film) => film.vehicles)
-  films: (Film | string)[];
+  films: Film[];
   @ApiProperty({ description: 'This is when the vehicle was created', nullable: false })
   @Column()
   created: Date;

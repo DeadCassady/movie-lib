@@ -47,8 +47,9 @@ export class CreateStarshipDto {
   @IsString()
   starship_class: string;
   @ApiProperty({ description: 'Note identifier', nullable: false })
-  @ManyToMany(() => Person, (person) => person.starships)
-  pilots: Person[];
+  @IsArray()
+  @IsString()
+  pilots: string[];
   @ApiProperty({ description: 'Note identifier', nullable: false })
   @IsArray()
   @IsString({ each: true })

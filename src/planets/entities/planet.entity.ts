@@ -16,13 +16,13 @@ export class Planet {
   name: string;
   @ApiProperty({ description: 'Note identifier', nullable: false })
   @Column()
-  rotation_period: number;
+  rotation_period: string;
   @ApiProperty({ description: 'Note identifier', nullable: false })
   @Column()
-  orbital_period: number;
+  orbital_period: string;
   @ApiProperty({ description: 'Note identifier', nullable: false })
   @Column()
-  diameter: number;
+  diameter: string;
   @ApiProperty({ description: 'Note identifier', nullable: false })
   @Column()
   climate: string;
@@ -34,16 +34,16 @@ export class Planet {
   terrain: string;
   @ApiProperty({ description: 'Note identifier', nullable: false })
   @Column()
-  surface_water: number;
+  surface_water: string;
   @ApiProperty({ description: 'Note identifier', nullable: false })
   @Column()
-  population: number;
+  population: string;
   @ApiProperty({ description: 'Note identifier', nullable: false })
   @OneToMany(() => Person, (person) => person.homeworld)
-  residents: (Person | string)[];
+  residents: Person[];
   @ApiProperty({ description: 'Note identifier', nullable: false })
   @ManyToMany(() => Film, (film) => film.planets)
-  films: (Film | string)[];
+  films: Film[];
   @ApiProperty({ description: 'Note identifier', nullable: false })
   @Column()
   created: Date;

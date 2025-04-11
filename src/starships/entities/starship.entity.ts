@@ -5,7 +5,6 @@ import { Person } from 'src/people/entities/person.entity';
 import {
   Column,
   Entity,
-  JoinTable,
   ManyToMany,
   PrimaryGeneratedColumn,
   AfterLoad,
@@ -29,40 +28,40 @@ export class Starship {
   manufacturer: string;
   @ApiProperty({ description: 'This is the cost of the starship', nullable: false })
   @Column()
-  cost_in_credits: number;
+  cost_in_credits: string;
   @ApiProperty({ description: 'This is the length of the starship', nullable: false })
   @Column()
-  length: number;
+  length: string;
   @ApiProperty({ description: 'This is the max speed', nullable: false })
   @Column()
   max_atmosphering_speed: string;
   @ApiProperty({ description: 'This is the number of people', nullable: false })
   @Column()
-  crew: number;
+  crew: string;
   @ApiProperty({ description: 'This is the number of passengers on the ship', nullable: false })
   @Column()
-  passengers: number;
+  passengers: string;
   @ApiProperty({ description: 'This is the cargo capacity', nullable: false })
   @Column()
-  cargo_capacity: number;
+  cargo_capacity: string;
   @ApiProperty({ description: `This is the number of years that the ship won't run out of the consumables`, nullable: false })
   @Column()
   consumables: string;
   @ApiProperty({ description: 'This is the hyperdrive rating', nullable: false })
   @Column()
-  hyperdrive_rating: number;
+  hyperdrive_rating: string;
   @ApiProperty({ description: 'This is the MGLT', nullable: false })
   @Column()
-  MGLT: number;
+  MGLT: string;
   @ApiProperty({ description: 'This is the starship class', nullable: false })
   @Column()
   starship_class: string;
   @ApiProperty({ description: 'Note identifier', nullable: false })
   @ManyToMany(() => Person, (person) => person.starships)
-  pilots: (Person | string)[];
+  pilots: Person[];
   @ApiProperty({ description: 'This is the array of films', nullable: false })
   @ManyToMany(() => Film, (film) => film.starships)
-  films: (Film | string)[];
+  films: Film[];
   @ApiProperty({ description: 'Note identifier', nullable: false })
   @Column()
   created: Date;

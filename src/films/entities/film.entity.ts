@@ -9,10 +9,8 @@ import {
   AfterLoad,
   Column,
   Entity,
-  JoinColumn,
   JoinTable,
   ManyToMany,
-  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -44,23 +42,23 @@ export class Film {
   @ApiProperty({ description: 'A list of characters in the film', nullable: false })
   @ManyToMany(() => Person, (person) => person.films)
   @JoinTable()
-  characters: (Person | string)[];
+  characters: Person[];
   @ApiProperty({ description: 'A number of planets that appear in the movie', nullable: false })
   @ManyToMany(() => Planet, (planet) => planet.films, { cascade: true })
   @JoinTable()
-  planets: (Planet | string)[];
+  planets: Planet[];
   @ApiProperty({ description: 'A list of starships that appear in the film', nullable: false })
   @ManyToMany(() => Starship, (starship) => starship.films)
   @JoinTable()
-  starships: (Starship | string)[];
+  starships: Starship[];
   @ApiProperty({ description: 'A list of vehicles that appear in the film', nullable: false })
   @ManyToMany(() => Vehicle, (vehicle) => vehicle.films)
   @JoinTable()
-  vehicles: (Vehicle | string)[];
+  vehicles: Vehicle[];
   @ApiProperty({ description: 'These are the species that appear in the movie', nullable: false })
   @ManyToMany(() => Specie, (specie) => specie.films)
   @JoinTable()
-  species: (Specie | string)[];
+  species: Specie[];
   @ApiProperty({ description: 'This is when the this is when the entry was created', nullable: false })
   @Column()
   created: Date;

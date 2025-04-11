@@ -35,8 +35,9 @@ export class CreatePlanetDto {
   @IsNumber()
   readonly population: number;
   @ApiProperty({ description: 'Note identifier', nullable: false })
-  @OneToMany(() => Person, (person) => person.url)
-  readonly residents: Person[];
+  @IsArray()
+  @IsString({ each: true })
+  readonly residents: string[];
   @ApiProperty({ description: 'Note identifier', nullable: false })
   @IsArray()
   @IsString({ each: true })

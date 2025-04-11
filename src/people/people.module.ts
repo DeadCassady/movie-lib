@@ -11,7 +11,7 @@ import { Film } from '../films/entities/film.entity';
 
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Person, Planet,Starship, Vehicle, Specie, Film])],
+  imports: [TypeOrmModule.forFeature([Person, Planet, Starship, Vehicle, Specie, Film])],
   controllers: [PeopleController],
   providers: [PeopleService],
 })
