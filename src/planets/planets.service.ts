@@ -69,6 +69,55 @@ export class PlanetsService {
     return this.findOne(id);
   }
 
+
+  async transform(dto: UpdatePlanetDto) {
+
+
+    const people = dto.people?.map(async (DTO) => {
+      return await this.people.findOne({
+        where: { title: DTO }
+      }).then((data) => {
+        if (!data) {
+          throw new NotFoundException(`The specie ${DTO} was not found`)
+        } else {
+          return data
+        }
+      })
+    })
+
+    const films = dto.films?.map(async (DTO) => {
+      return await this.filmsRepository.findOne({
+        where: { title: DTO }
+      }).then((data) => {
+        if (!data) {
+          throw new NotFoundException(`The specie ${DTO} was not found`)
+        } else {
+          return data
+        }
+      })
+    })
+
+    Promise.all([planet, films, species, vehicles, starships]);
+
+    const newObj = {
+      name: dto.name || undefined,
+      height: dto.height || undefined,
+      mass: dto.mass || undefined,
+      hair_color: dto.hair_color || undefined,
+      skin_color: dto.hair_color || undefined,
+      eye_color: dto.eye_color || undefined,
+      birth_year: dto.birth_year || undefined,
+      gender: dto.gender || undefined,
+      homeworld: planet || undefined,
+      films: films || undefined,
+      species: species || undefined,
+      vehicles: vehicles || undefined,
+      starships: starships || undefined,
+      edited: new Date()
+    }
+    return newObj
+  }
+
   async remove(id: number): Promise<void> {
     const result = await this.planetsRepository.delete(id);
     if (result.affected === 0) {

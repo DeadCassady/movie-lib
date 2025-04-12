@@ -110,7 +110,16 @@ export class FilmsService {
   }
 
   update(id: number, updateFilmDto: UpdateFilmDto) {
-    return `This action updates a #${id} film`;
+    const obj = this.transform(updatePersonDto)
+    const person = new TransformPersonDto()
+    Object.assign(person, obj)
+    try {
+      await this.peopleRepository.update(id, person);
+      return this.findOne(id);
+    } catch (error) {
+
+      throw new InternalServerErrorException(`Was not able to update the person with ID ${id}`)
+    }
   }
 
   remove(id: number) {

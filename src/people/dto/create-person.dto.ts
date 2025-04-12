@@ -1,16 +1,16 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsDate, IsNumber, IsString } from 'class-validator';
+import { IsArray, IsDate, IsString } from 'class-validator';
 
 export class CreatePersonDto {
   @ApiProperty({ description: 'Note identifier', nullable: false })
   @IsString()
   readonly name: string;
   @ApiProperty({ description: 'Note identifier', nullable: false })
-  @IsNumber()
-  readonly height: number;
+  @IsString()
+  readonly height: string;
   @ApiProperty({ description: 'Note identifier', nullable: false })
-  @IsNumber()
-  readonly mass: number;
+  @IsString()
+  readonly mass: string;
   @ApiProperty({ description: 'Note identifier', nullable: false })
   @IsString()
   readonly hair_color: string;

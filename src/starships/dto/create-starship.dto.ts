@@ -1,12 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsDate, IsNumber, IsString } from 'class-validator';
-import { Person } from 'src/people/entities/person.entity';
-import { ManyToMany } from 'typeorm';
+import { IsArray, IsDate, IsString } from 'class-validator';
 
 export class CreateStarshipDto {
-  @ApiProperty({ description: 'Note identifier', nullable: false })
-  @IsNumber()
-  id: number;
   @ApiProperty({ description: 'Note identifier', nullable: false })
   @IsString()
   name: string;
@@ -18,31 +13,31 @@ export class CreateStarshipDto {
   manufacturer: string;
   @ApiProperty({ description: 'Note identifier', nullable: false })
   @IsString()
-  cost_in_credits: number;
+  cost_in_credits: string;
   @ApiProperty({ description: 'Note identifier', nullable: false })
-  @IsNumber()
-  length: number;
+  @IsString()
+  length: string;
   @ApiProperty({ description: 'Note identifier', nullable: false })
   @IsString()
   max_atmosphering_speed: string;
   @ApiProperty({ description: 'Note identifier', nullable: false })
-  @IsNumber()
-  crew: number;
+  @IsString()
+  crew: string;
   @ApiProperty({ description: 'Note identifier', nullable: false })
-  @IsNumber()
-  passengers: number;
+  @IsString()
+  passengers: string;
   @ApiProperty({ description: 'Note identifier', nullable: false })
-  @IsNumber()
-  cargo_capacity: number;
+  @IsString()
+  cargo_capacity: string;
   @ApiProperty({ description: 'Note identifier', nullable: false })
   @IsString()
   consumables: string;
   @ApiProperty({ description: 'Note identifier', nullable: false })
-  @IsNumber()
-  hyperdrive_rating: number;
+  @IsString()
+  hyperdrive_rating: string;
   @ApiProperty({ description: 'Note identifier', nullable: false })
-  @IsNumber()
-  MGLT: number;
+  @IsString()
+  MGLT: string;
   @ApiProperty({ description: 'Note identifier', nullable: false })
   @IsString()
   starship_class: string;
@@ -60,7 +55,4 @@ export class CreateStarshipDto {
   @ApiProperty({ description: 'Note identifier', nullable: false })
   @IsDate()
   edited: Date;
-  @ApiProperty({ description: 'Note identifier', nullable: false })
-  @IsString()
-  url: string;
 }

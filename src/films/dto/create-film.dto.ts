@@ -1,13 +1,13 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsArray, IsDate, IsNumber, IsString } from "class-validator";
+import { IsArray, IsDate, IsString } from "class-validator";
 
 export class CreateFilmDto {
   @ApiProperty({ description: 'This is the title of the film', nullable: false })
   @IsString()
   title: string;
   @ApiProperty({ description: "This is the film's episode id", nullable: false })
-  @IsNumber()
-  episode_id: number;
+  @IsString()
+  episode_id: string;
   @ApiProperty({ description: "This is the film's opening crawl", nullable: false })
   @IsString()
   opening_crawl: string;

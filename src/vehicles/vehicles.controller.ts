@@ -1,34 +1,58 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus, ParseIntPipe } from '@nestjs/common';
 import { VehiclesService } from './vehicles.service';
 import { CreateVehicleDto } from './dto/create-vehicle.dto';
 import { UpdateVehicleDto } from './dto/update-vehicle.dto';
+import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Vehicle } from './entities/vehicle.entity';
 
+@ApiTags('vehicles')
 @Controller('vehicles')
 export class VehiclesController {
-  constructor(private readonly vehiclesService: VehiclesService) {}
+  constructor(private readonly vehiclesService: VehiclesService) { }
 
   @Post()
+  @ApiOperation({ summary: 'Creates a Vehicle' })
+  @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Vehicle })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   create(@Body() createVehicleDto: CreateVehicleDto) {
     return this.vehiclesService.create(createVehicleDto);
   }
 
   @Get()
+  @ApiOperation({ summary: 'Returns a list of all Vehicle' })
+  @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Vehicle })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   findAll() {
     return this.vehiclesService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  @ApiOperation({ summary: 'Returns a Vehicle with specified id' })
+  @ApiParam({ name: 'id', required: true, description: 'Vehicle identifier' })
+  @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Vehicle })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
+  findOne(@Param('id', new ParseIntPipe()) id: string) {
     return this.vehiclesService.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateVehicleDto: UpdateVehicleDto) {
+  @ApiOperation({ summary: 'Updates a Vehicle with specified id' })
+  @ApiParam({ name: 'id', required: true, description: 'Vehicle identifier' })
+  @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Vehicle })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
+  update(
+    @Param('id', new ParseIntPipe()) id: string,
+    @Body() updateVehicleDto: UpdateVehicleDto,
+  ) {
     return this.vehiclesService.update(+id, updateVehicleDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.vehiclesService.remove(+id);
+  @ApiOperation({ summary: 'Deletes a Vehicle with specified id' })
+  @ApiParam({ name: 'id', required: true, description: 'Vehicle identifier' })
+  @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Vehicle })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
+  remove(@Param('id', new ParseIntPipe()) id: string) {
+    return this.vehiclesService.remove(+id)
   }
 }

@@ -1,24 +1,19 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsDate, IsNumber, IsString } from 'class-validator';
-import { Person } from 'src/people/entities/person.entity';
-import { OneToMany } from 'typeorm';
+import { IsArray, IsDate, IsString } from 'class-validator';
 
 export class CreatePlanetDto {
-  @ApiProperty({ description: 'Note identifier', nullable: false })
-  @IsNumber()
-  readonly id: number;
   @ApiProperty({ description: 'Note identifier', nullable: false })
   @IsString()
   readonly name: string;
   @ApiProperty({ description: 'Note identifier', nullable: false })
-  @IsNumber()
-  readonly rotation_period: number;
+  @IsString()
+  readonly rotation_period: string;
   @ApiProperty({ description: 'Note identifier', nullable: false })
-  @IsNumber()
-  readonly orbital_period: number;
+  @IsString()
+  readonly orbital_period: string;
   @ApiProperty({ description: 'Note identifier', nullable: false })
-  @IsNumber()
-  readonly diameter: number;
+  @IsString()
+  readonly diameter: string;
   @ApiProperty({ description: 'Note identifier', nullable: false })
   @IsString()
   readonly climate: string;
@@ -29,11 +24,11 @@ export class CreatePlanetDto {
   @IsString()
   readonly terrain: string;
   @ApiProperty({ description: 'Note identifier', nullable: false })
-  @IsNumber()
-  readonly surface_water: number;
+  @IsString()
+  readonly surface_water: string;
   @ApiProperty({ description: 'Note identifier', nullable: false })
-  @IsNumber()
-  readonly population: number;
+  @IsString()
+  readonly population: string;
   @ApiProperty({ description: 'Note identifier', nullable: false })
   @IsArray()
   @IsString({ each: true })
@@ -48,7 +43,4 @@ export class CreatePlanetDto {
   @ApiProperty({ description: 'Note identifier', nullable: false })
   @IsDate()
   readonly edited: Date;
-  @ApiProperty({ description: 'Note identifier', nullable: false })
-  @IsString()
-  readonly url: string;
 }
