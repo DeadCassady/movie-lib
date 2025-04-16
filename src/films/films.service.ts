@@ -9,6 +9,7 @@ import { Planet } from 'src/planets/entities/planet.entity';
 import { Starship } from 'src/starships/entities/starship.entity';
 import { Specie } from 'src/species/entities/species.entity';
 import { Vehicle } from 'src/vehicles/entities/vehicle.entity';
+import { TransformFilmDto } from './dto/transform-film.dto';
 
 @Injectable()
 export class FilmsService {
@@ -109,17 +110,83 @@ export class FilmsService {
     return `This action returns a #${id} film`;
   }
 
-  update(id: number, updateFilmDto: UpdateFilmDto) {
-    const obj = this.transform(updatePersonDto)
-    const person = new TransformPersonDto()
-    Object.assign(person, obj)
+  async update(id: number, updateFilmDto: UpdateFilmDto) {
+    const obj = await this.transform(updateFilmDto)
     try {
-      await this.peopleRepository.update(id, person);
+      await this.filmsRepository.update(id, obj);
       return this.findOne(id);
     } catch (error) {
 
-      throw new InternalServerErrorException(`Was not able to update the person with ID ${id}`)
+      throw new InternalServerErrorException(`Was not able to update the film with ID ${id}`)
     }
+  }
+
+  async transform(dto: UpdateFilmDto) {
+    const film = new TransformFilmDto
+    const planets = dto.planets?.map(async (DTO) => {
+      return await this.planetsRepository.findOne({
+        where: { name: DTO }
+      }).then((data) => {
+        if (!data) {
+          throw new NotFoundException(`The planet ${DTO} was not found`)
+        } else {
+          return data
+        }
+      })
+    })
+
+    const vehicles = dto.vehicles?.map(async (DTO) => {
+      return await this.vehicleRepository.findOne({
+        where: { name: DTO }
+      }).then((data) => {
+        if (!data) {
+          throw new NotFoundException(`The vehicle ${DTO} was not found`)
+        } else {
+          return data
+        }
+      })
+    })
+
+    const starships = dto.starships?.map(async (DTO) => {
+      return await this.starshipRepository.findOne({
+        where: { name: DTO }
+      }).then((data) => {
+        if (!data) {
+          throw new NotFoundException(`The starship ${DTO} was not found`)
+        } else {
+          return data
+        }
+      })
+    })
+
+    const species = dto.species?.map(async (DTO) => {
+      return await this.speciesRepository.findOne({
+        where: { name: DTO }
+      }).then((data) => {
+        if (!data) {
+          throw new NotFoundException(`The specie ${DTO} was not found`)
+        } else {
+          return data
+        }
+      })
+    })
+
+    const people = dto.characters?.map(async (DTO) => {
+      return await this.peopleRepository.findOne({
+        where: { name: DTO }
+      }).then((data) => {
+        if (!data) {
+          throw new NotFoundException(`The person ${DTO} was not found`)
+        } else {
+          return data
+        }
+      })
+    })
+
+    Promise.all([planets, people, species, vehicles, starships]);
+
+    Object.assign(film, dto, { characters: people, planets, starships, species, vehicles })
+    return film
   }
 
   remove(id: number) {

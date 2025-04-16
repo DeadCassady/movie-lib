@@ -114,11 +114,9 @@ export class PeopleService {
 
 
   async update(id: number, updatePersonDto: UpdatePersonDto): Promise<Person> {
-    const obj = this.transform(updatePersonDto)
-    const person = new TransformPersonDto()
-    Object.assign(person, obj)
+    const obj = await this.transform(updatePersonDto)
     try {
-      await this.peopleRepository.update(id, person);
+      await this.peopleRepository.update(id, obj);
       return this.findOne(id);
     } catch (error) {
 
@@ -127,6 +125,8 @@ export class PeopleService {
   }
 
   async transform(dto: UpdatePersonDto) {
+    const person = new TransformPersonDto
+
     let planet: Planet | undefined
 
     if (dto.homeworld) {
@@ -192,23 +192,8 @@ export class PeopleService {
 
     Promise.all([planet, films, species, vehicles, starships]);
 
-    const newObj = {
-      name: dto.name || undefined,
-      height: dto.height || undefined,
-      mass: dto.mass || undefined,
-      hair_color: dto.hair_color || undefined,
-      skin_color: dto.hair_color || undefined,
-      eye_color: dto.eye_color || undefined,
-      birth_year: dto.birth_year || undefined,
-      gender: dto.gender || undefined,
-      homeworld: planet || undefined,
-      films: films || undefined,
-      species: species || undefined,
-      vehicles: vehicles || undefined,
-      starships: starships || undefined,
-      edited: new Date()
-    }
-    return newObj
+    Object.assign(person, dto, { homeworld: planet, films, species, vehicles, starships })
+    return person
   }
 
 

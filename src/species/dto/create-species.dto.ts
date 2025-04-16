@@ -17,7 +17,7 @@ export class CreateSpeciesDto {
   @ApiProperty({ description: 'The number of people of the given specie', nullable: false })
   @IsArray()
   @IsString({ each: true })
-  people: string[];
+  residents: string[];
   @ApiProperty({ description: 'The number of people of the given specie', nullable: false })
   @IsArray()
   @IsString({ each: true })
