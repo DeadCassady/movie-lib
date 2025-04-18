@@ -6,6 +6,7 @@ import { Starship } from './entities/starship.entity';
 import { Repository } from 'typeorm';
 import { Person } from 'src/people/entities/person.entity';
 import { Film } from 'src/films/entities/film.entity';
+import { TransformStarshipDto } from './dto/transform-starship.dto';
 
 @Injectable()
 export class StarshipsService {
@@ -68,8 +69,48 @@ export class StarshipsService {
   async update(
     id: number,
     updateStarshipDto: UpdateStarshipDto,
-  ): Promise<Starship> {
-    return this.findOne(id);
+  ) {
+    const obj = await this.transform(updateStarshipDto)
+    try {
+      await this.starshipsRepository.update(id, obj);
+      return this.findOne(id);
+    } catch (error) {
+
+      throw new InternalServerErrorException(`Was not able to update the film with ID ${id}`)
+    }
+  }
+
+  async transform(dto: UpdateStarshipDto) {
+    const starship = new TransformStarshipDto
+
+    const films = dto.films?.map(async (DTO) => {
+      return await this.filmsRepository.findOne({
+        where: { title: DTO }
+      }).then((data) => {
+        if (!data) {
+          throw new NotFoundException(`The specie ${DTO} was not found`)
+        } else {
+          return data
+        }
+      })
+    })
+
+    const people = dto.pilots?.map(async (DTO) => {
+      return await this.peopleRepository.findOne({
+        where: { name: DTO }
+      }).then((data) => {
+        if (!data) {
+          throw new NotFoundException(`The person ${DTO} was not found`)
+        } else {
+          return data
+        }
+      })
+    })
+
+    Promise.all([films, people]);
+
+    Object.assign(starship, dto, { pilots: people, films })
+    return starship
   }
 
   async remove(id: number): Promise<void> {

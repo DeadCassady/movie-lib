@@ -6,6 +6,8 @@ import { Planet } from './entities/planet.entity';
 import { Repository } from 'typeorm';
 import { Person } from 'src/people/entities/person.entity';
 import { Film } from 'src/films/entities/film.entity';
+import { TransformStarshipDto } from 'src/starships/dto/transform-starship.dto';
+import { TransformPlanetDto } from './dto/transform-planet.dto';
 
 @Injectable()
 export class PlanetsService {
@@ -66,16 +68,22 @@ export class PlanetsService {
   }
 
   async update(id: number, updatePlanetDto: UpdatePlanetDto): Promise<Planet> {
-    return this.findOne(id);
+    const obj = await this.transform(updatePlanetDto)
+    try {
+      await this.planetsRepository.update(id, obj)
+      return this.findOne(id)
+    } catch (error) {
+      throw new InternalServerErrorException(`Was not able to update the planet with ID ${id}`)
+    }
   }
 
 
   async transform(dto: UpdatePlanetDto) {
+    const planet = new TransformPlanetDto
 
-
-    const people = dto.people?.map(async (DTO) => {
-      return await this.people.findOne({
-        where: { title: DTO }
+    const people = dto.residents?.map(async (DTO) => {
+      return await this.peopleRepository.findOne({
+        where: { name: DTO }
       }).then((data) => {
         if (!data) {
           throw new NotFoundException(`The specie ${DTO} was not found`)
@@ -97,25 +105,9 @@ export class PlanetsService {
       })
     })
 
-    Promise.all([planet, films, species, vehicles, starships]);
-
-    const newObj = {
-      name: dto.name || undefined,
-      height: dto.height || undefined,
-      mass: dto.mass || undefined,
-      hair_color: dto.hair_color || undefined,
-      skin_color: dto.hair_color || undefined,
-      eye_color: dto.eye_color || undefined,
-      birth_year: dto.birth_year || undefined,
-      gender: dto.gender || undefined,
-      homeworld: planet || undefined,
-      films: films || undefined,
-      species: species || undefined,
-      vehicles: vehicles || undefined,
-      starships: starships || undefined,
-      edited: new Date()
-    }
-    return newObj
+    Promise.all([people, films]);
+    Object.assign(planet, { residents: people, films })
+    return planet
   }
 
   async remove(id: number): Promise<void> {

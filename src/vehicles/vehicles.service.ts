@@ -71,7 +71,7 @@ export class VehiclesService {
       return this.findOne(id);
     } catch (error) {
 
-      throw new InternalServerErrorException(`Was not able to update the film with ID ${id}`)
+      throw new InternalServerErrorException(`Was not able to update the vehicle with ID ${id}`)
     }
   }
 
