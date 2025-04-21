@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Image } from 'src/image-upload/entities/image.entity'
 import { Expose } from 'class-transformer';
 import { Person } from 'src/people/entities/person.entity';
 import { Planet } from 'src/planets/entities/planet.entity';
@@ -8,6 +9,7 @@ import {
   Column,
   Entity,
   JoinColumn,
+  JoinTable,
   ManyToMany,
   ManyToOne,
   OneToMany,
@@ -40,6 +42,10 @@ export class Specie {
   @ApiProperty({ description: 'The number of people of the given specie', nullable: false })
   @ManyToMany(() => Film, (film) => film.species)
   films: Film[];
+  @ApiProperty({ description: 'This is the array of images', nullable: false })
+  @ManyToMany(() => Image, (image) => image.specie)
+  @JoinTable()
+  images: Image[];
   @ApiProperty({ description: 'This is when the this is when the entry was created', nullable: false })
   @Column()
   created: Date;

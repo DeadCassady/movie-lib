@@ -7,6 +7,7 @@ import { FilmsModule } from './films/films.module';
 import { VehiclesModule } from './vehicles/vehicles.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataLoaderModule } from './data-loader/data-loader.module';
+import { ImageModule } from './image-upload/image.module';
 
 @Module({
   imports: [
@@ -26,7 +27,8 @@ import { DataLoaderModule } from './data-loader/data-loader.module';
     FilmsModule,
     VehiclesModule,
     SpeciesModule,
-    DataLoaderModule
+    DataLoaderModule,
+    ImageModule
   ],
 })
 export class AppModule { }

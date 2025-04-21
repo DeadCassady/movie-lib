@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Image } from 'src/image-upload/entities/image.entity'
 import { Expose } from 'class-transformer';
 import { Film } from 'src/films/entities/film.entity';
 import { Planet } from 'src/planets/entities/planet.entity';
@@ -65,6 +66,10 @@ export class Person {
   @ManyToMany(() => Starship, (starship) => starship.pilots, { cascade: true })
   @JoinTable()
   starships: Starship[];
+  @ApiProperty({ description: 'This is the array of images', nullable: false })
+  @ManyToMany(() => Image, (image) => image.person)
+  @JoinTable()
+  images: Image[];
   @ApiProperty({ description: 'This is when the character was created', nullable: false })
   @Column()
   created: Date;

@@ -117,7 +117,7 @@ export class SpeciesService {
       })
     })
 
-    const people = dto.residents?.map(async (DTO) => {
+    const people = dto.people?.map(async (DTO) => {
       return await this.peopleRepository.findOne({
         where: { name: DTO }
       }).then((data) => {

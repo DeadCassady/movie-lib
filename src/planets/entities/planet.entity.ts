@@ -1,8 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Image } from 'src/image-upload/entities/image.entity'
 import { Expose } from 'class-transformer';
 import { Film } from 'src/films/entities/film.entity';
 import { Person } from 'src/people/entities/person.entity';
-import { AfterLoad, Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { AfterLoad, Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 const url = 'http://localhost:3000/api#/planets/'
 
@@ -44,6 +45,10 @@ export class Planet {
   @ApiProperty({ description: 'Note identifier', nullable: false })
   @ManyToMany(() => Film, (film) => film.planets)
   films: Film[];
+  @ApiProperty({ description: 'This is the array of images', nullable: false })
+  @ManyToMany(() => Image, (image) => image.planet)
+  @JoinTable()
+  images: Image[];
   @ApiProperty({ description: 'Note identifier', nullable: false })
   @Column()
   created: Date;

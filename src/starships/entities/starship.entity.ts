@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Image } from 'src/image-upload/entities/image.entity'
 import { Expose } from 'class-transformer';
 import { Film } from 'src/films/entities/film.entity';
 import { Person } from 'src/people/entities/person.entity';
@@ -8,6 +9,7 @@ import {
   ManyToMany,
   PrimaryGeneratedColumn,
   AfterLoad,
+  JoinTable,
 } from 'typeorm';
 
 const url = 'http://localhost:3000/api#/starships/'
@@ -62,6 +64,10 @@ export class Starship {
   @ApiProperty({ description: 'This is the array of films', nullable: false })
   @ManyToMany(() => Film, (film) => film.starships)
   films: Film[];
+  @ApiProperty({ description: 'This is the array of images', nullable: false })
+  @ManyToMany(() => Image, (image) => image.starship)
+  @JoinTable()
+  images: Image[];
   @ApiProperty({ description: 'Note identifier', nullable: false })
   @Column()
   created: Date;

@@ -103,11 +103,15 @@ export class FilmsService {
   }
 
   findAll() {
-    return `This action returns all films`;
+    return this.peopleRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} film`;
+  async findOne(id: number): Promise<Film> {
+    const film = await this.filmsRepository.findOneBy({ id });
+    if (!film) {
+      throw new NotFoundException(`film with ID ${id} not found`);
+    }
+    return film;
   }
 
   async update(id: number, updateFilmDto: UpdateFilmDto) {

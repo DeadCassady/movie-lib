@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Image } from 'src/image-upload/entities/image.entity'
 import { Expose } from 'class-transformer';
 import { Film } from 'src/films/entities/film.entity';
 import { Person } from 'src/people/entities/person.entity';
@@ -8,6 +9,7 @@ import {
   ManyToMany,
   PrimaryGeneratedColumn,
   AfterLoad,
+  JoinTable,
 } from 'typeorm';
 
 const url = 'http://localhost:3000/api#/vehicles/'
@@ -56,6 +58,10 @@ export class Vehicle {
   @ApiProperty({ description: 'This is the array of films', nullable: false })
   @ManyToMany(() => Film, (film) => film.vehicles)
   films: Film[];
+  @ApiProperty({ description: 'This is the array of images', nullable: false })
+  @ManyToMany(() => Image, (image) => image.vehicle)
+  @JoinTable()
+  images: Image[];
   @ApiProperty({ description: 'This is when the vehicle was created', nullable: false })
   @Column()
   created: Date;
