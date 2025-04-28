@@ -8,17 +8,19 @@ import {
   Delete,
   HttpStatus,
   ParseIntPipe,
+  UseInterceptors,
 } from '@nestjs/common';
 import { PlanetsService } from './planets.service';
 import { CreatePlanetDto } from './dto/create-planet.dto';
 import { UpdatePlanetDto } from './dto/update-planet.dto';
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Planet } from './entities/planet.entity';
+import { CustomInterceptors } from 'src/interceptors/custom.interceptors';
 
 @ApiTags('Planets')
 @Controller('planets')
 export class PlanetsController {
-  constructor(private readonly planetsService: PlanetsService) {}
+  constructor(private readonly planetsService: PlanetsService) { }
 
   @Post()
   @ApiOperation({ summary: 'Creates a Planet' })
@@ -32,6 +34,7 @@ export class PlanetsController {
   @ApiOperation({ summary: 'Returns a list of all people' })
   @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Planet })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
+  @UseInterceptors(CustomInterceptors)
   findAll() {
     return this.planetsService.findAll();
   }
@@ -41,6 +44,7 @@ export class PlanetsController {
   @ApiParam({ name: 'id', required: true, description: 'Planet identifier' })
   @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Planet })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
+  @UseInterceptors(CustomInterceptors)
   findOne(@Param('id', new ParseIntPipe()) id: string) {
     return this.planetsService.findOne(+id);
   }

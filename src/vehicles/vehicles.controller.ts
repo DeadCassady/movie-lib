@@ -1,9 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus, ParseIntPipe, UseInterceptors } from '@nestjs/common';
 import { VehiclesService } from './vehicles.service';
 import { CreateVehicleDto } from './dto/create-vehicle.dto';
 import { UpdateVehicleDto } from './dto/update-vehicle.dto';
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Vehicle } from './entities/vehicle.entity';
+import { CustomInterceptors } from 'src/interceptors/custom.interceptors';
 
 @ApiTags('vehicles')
 @Controller('vehicles')
@@ -22,6 +23,7 @@ export class VehiclesController {
   @ApiOperation({ summary: 'Returns a list of all Vehicle' })
   @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Vehicle })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
+  @UseInterceptors(CustomInterceptors)
   findAll() {
     return this.vehiclesService.findAll();
   }
@@ -31,6 +33,7 @@ export class VehiclesController {
   @ApiParam({ name: 'id', required: true, description: 'Vehicle identifier' })
   @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Vehicle })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
+  @UseInterceptors(CustomInterceptors)
   findOne(@Param('id', new ParseIntPipe()) id: string) {
     return this.vehiclesService.findOne(+id);
   }

@@ -2,6 +2,7 @@ import { Controller, Delete, HttpStatus, Param, ParseFilePipeBuilder, Post, Uplo
 import { FileInterceptor } from "@nestjs/platform-express";
 import { FileStorage } from "./services/file-storage.service";
 import { ImageService } from "./services/image.service";
+import { ApiBody, ApiConsumes, ApiOperation } from "@nestjs/swagger";
 
 @Controller('images')
 export class ImagesController {
@@ -10,6 +11,20 @@ export class ImagesController {
     private readonly imageService: ImageService
   ) { }
   @Post(':entityType/:entityId/upload')
+  @ApiOperation({ summary: 'Upload a file' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    description: 'Image upload',
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+        }
+      }
+    }
+  })
   @UseInterceptors(FileInterceptor('file'))
   async uploadFile(
 
@@ -19,7 +34,7 @@ export class ImagesController {
           fileType: 'jpeg',
         })
         .addMaxSizeValidator({
-          maxSize: 1000
+          maxSize: 100000
         })
         .build({
           errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY

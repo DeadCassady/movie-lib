@@ -1,9 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus, ParseIntPipe, UseInterceptors } from '@nestjs/common';
 import { FilmsService } from './films.service';
 import { CreateFilmDto } from './dto/create-film.dto';
 import { UpdateFilmDto } from './dto/update-film.dto';
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Film } from './entities/film.entity';
+import { CustomInterceptors } from 'src/interceptors/custom.interceptors';
 
 @ApiTags("Films")
 @Controller('films')
@@ -22,6 +23,7 @@ export class FilmsController {
   @ApiOperation({ summary: 'Returns a list of all films' })
   @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Film })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
+  @UseInterceptors(CustomInterceptors)
   findAll() {
     return this.filmsService.findAll();
   }
@@ -31,6 +33,7 @@ export class FilmsController {
   @ApiParam({ name: 'id', required: true, description: 'Film identifier' })
   @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Film })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
+  @UseInterceptors(CustomInterceptors)
   findOne(@Param('id', new ParseIntPipe()) id: string) {
     return this.filmsService.findOne(+id);
   }

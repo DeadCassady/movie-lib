@@ -14,7 +14,7 @@ export class FileStorage {
   async saveFile(file: Express.Multer.File): Promise<{ filename: string; originalName: string }> {
     ensureDir(this.uploadDir); // Створити папку, якщо її немає
 
-    const filename = `${uuidv4()}${path.extname(file.originalname)}`;
+    const filename = `${uuidv4()}${path}.jpeg`;
     const filePath = join(this.uploadDir, filename);
 
     writeFile(filePath, file.buffer, () => { }); // Зберегти файл

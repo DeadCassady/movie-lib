@@ -8,16 +8,18 @@ import {
   Delete,
   HttpStatus,
   ParseIntPipe,
+  UseInterceptors,
 } from '@nestjs/common';
 import { StarshipsService } from './starships.service';
 import { CreateStarshipDto } from './dto/create-starship.dto';
 import { UpdateStarshipDto } from './dto/update-starship.dto';
 import { ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
 import { Starship } from './entities/starship.entity';
+import { CustomInterceptors } from 'src/interceptors/custom.interceptors';
 
 @Controller('starships')
 export class StarshipsController {
-  constructor(private readonly starshipsService: StarshipsService) {}
+  constructor(private readonly starshipsService: StarshipsService) { }
 
   @Post()
   @ApiOperation({ summary: 'Creates a starship' })
@@ -39,6 +41,7 @@ export class StarshipsController {
     type: Starship,
   })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
+  @UseInterceptors(CustomInterceptors)
   findAll() {
     return this.starshipsService.findAll();
   }

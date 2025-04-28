@@ -8,12 +8,14 @@ import {
   Delete,
   HttpStatus,
   ParseIntPipe,
+  UseInterceptors,
 } from '@nestjs/common';
 import { PeopleService } from './people.service';
 import { CreatePersonDto } from './dto/create-person.dto';
 import { UpdatePersonDto } from './dto/update-person.dto';
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Person } from './entities/person.entity';
+import { CustomInterceptors } from 'src/interceptors/custom.interceptors';
 
 @ApiTags('People')
 @Controller('people')
@@ -32,6 +34,7 @@ export class PeopleController {
   @ApiOperation({ summary: 'Returns a list of all people' })
   @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Person })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
+  @UseInterceptors(CustomInterceptors)
   findAll() {
     return this.peopleService.findAll();
   }
@@ -41,6 +44,7 @@ export class PeopleController {
   @ApiParam({ name: 'id', required: true, description: 'person identifier' })
   @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Person })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
+  @UseInterceptors(CustomInterceptors)
   findOne(@Param('id', new ParseIntPipe()) id: string) {
     return this.peopleService.findOne(+id);
   }

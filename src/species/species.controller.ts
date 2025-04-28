@@ -1,9 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus, ParseIntPipe, UseInterceptors } from '@nestjs/common';
 import { SpeciesService } from './species.service';
 import { CreateSpeciesDto } from './dto/create-species.dto';
 import { UpdateSpeciesDto } from './dto/update-species.dto';
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Specie } from './entities/species.entity';
+import { CustomInterceptors } from 'src/interceptors/custom.interceptors';
 
 @ApiTags('Species')
 @Controller('species')
@@ -22,6 +23,7 @@ export class SpeciesController {
   @ApiOperation({ summary: 'Returns a list of all Specie' })
   @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Specie })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
+  @UseInterceptors(CustomInterceptors)
   findAll() {
     return this.speciesService.findAll();
   }
@@ -31,6 +33,7 @@ export class SpeciesController {
   @ApiParam({ name: 'id', required: true, description: 'Specie identifier' })
   @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Specie })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
+  @UseInterceptors(CustomInterceptors)
   findOne(@Param('id', new ParseIntPipe()) id: string) {
     return this.speciesService.findOne(+id);
   }

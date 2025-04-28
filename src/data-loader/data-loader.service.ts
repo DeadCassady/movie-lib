@@ -8,6 +8,7 @@ import { Specie } from "src/species/entities/species.entity";
 import { Starship } from "src/starships/entities/starship.entity";
 import { Vehicle } from "src/vehicles/entities/vehicle.entity";
 import { Repository } from "typeorm";
+import { https } from "follow-redirects";
 
 @Injectable()
 export class DataLoaderService implements OnApplicationBootstrap {
@@ -29,15 +30,33 @@ export class DataLoaderService implements OnApplicationBootstrap {
     await this.loadAllData()
   }
 
+  agent = new https.Agent({
+    rejectUnauthorized: false
+  })
+
+  async load<T>(type: string) {
+    const entities: T[] = [];
+    let index = 1;
+    while (true) {
+      const entity: T = await axios.get(`https://swapi.dev/api/${type}/${index}`, { httpsAgent: this.agent }).then(data => data.data.results).catch(error => error)
+
+      if (!entity) {
+        break
+      }
+      index++
+      entities.push(entity)
+    }
+    return entities
+  }
 
   async loadAllData() {
 
-    const vehicles = await axios.get('https://swapi.dev/api/vehicles/').then(data => data.data.results)
-    const people = await axios.get('https://swapi.dev/api/people/').then(data => data.data.results)
-    const films = await axios.get('https://swapi.dev/api/films/').then(data => data.data.results)
-    const planets = await axios.get('https://swapi.dev/api/planets/').then(data => data.data.results)
-    const species = await axios.get('https://swapi.dev/api/species/').then(data => data.data.results)
-    const starships = await axios.get('https://swapi.dev/api/starships/').then(data => data.data.results)
+    const vehicles = await axios.get(`https://swapi.dev/api/vehicles/`, { httpsAgent: this.agent }).then(data => data.data.results)
+    const people = await axios.get('https://swapi.dev/api/people/', { httpsAgent: this.agent }).then(data => data.data.results)
+    const films = await axios.get('https://swapi.dev/api/films/', { httpsAgent: this.agent }).then(data => data.data.results)
+    const planets = await axios.get('https://swapi.dev/api/planets/', { httpsAgent: this.agent }).then(data => data.data.results)
+    const species = await axios.get('https://swapi.dev/api/species/', { httpsAgent: this.agent }).then(data => data.data.results)
+    const starships = await axios.get('https://swapi.dev/api/starships/', { httpsAgent: this.agent }).then(data => data.data.results)
 
     console.log("Initializing vehicles..")
     const vehicleEntities = await Promise.all(vehicles.map((data: Vehicle) => {

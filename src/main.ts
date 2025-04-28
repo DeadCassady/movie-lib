@@ -21,6 +21,6 @@ async function bootstrap() {
       defaultModelExpandDepth: 3,
     },
   });
-  await app.listen(process.env.PORT ?? 8080);
+  await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap().catch((e: Error) => console.log(e));

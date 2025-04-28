@@ -56,8 +56,12 @@ export class VehiclesService {
 
   }
 
-  findAll() {
-    return `This action returns all vehicles`;
+  async findAll() {
+    const vehicles = await this.vehicleRepository.find({}).then((data) => {
+      return data.slice(data.length - 10, data.length)
+    })
+
+    return vehicles;
   }
 
   findOne(id: number) {
