@@ -5,7 +5,7 @@ import 'reflect-metadata';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  const config = new DocumentBuilder()
+  const swaggerConfig = new DocumentBuilder()
     .setTitle('My API') // Назва API
     .setDescription(`It's an API for navigating a movie library`) // Опис
     .setVersion('1.0') // Версія
@@ -13,7 +13,7 @@ async function bootstrap() {
     .addBearerAuth() // Підтримка Bearer Token (якщо є автентифікація)
     .build();
 
-  const document = SwaggerModule.createDocument(app, config);
+  const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('api', app, document, {
     customSiteTitle: 'API Docs',
     swaggerOptions: {
@@ -21,6 +21,7 @@ async function bootstrap() {
       defaultModelExpandDepth: 3,
     },
   });
+
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap().catch((e: Error) => console.log(e));

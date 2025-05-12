@@ -10,9 +10,14 @@ import { Image } from 'src/image-upload/entities/image.entity'
 import { ImagesController } from './image.controller';
 import { ImageService } from './services/image.service';
 import { FileStorage } from './services/file-storage.service';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Image, Person, Planet, Starship, Vehicle, Specie, Film])],
+  imports: [TypeOrmModule.forFeature([Image, Person, Planet, Starship, Vehicle, Specie, Film]),
+  ConfigModule.forRoot({
+    envFilePath: '.env',
+  })
+  ],
   controllers: [ImagesController],
   providers: [ImageService, FileStorage],
 })

@@ -34,7 +34,7 @@ export class ImagesController {
           fileType: 'jpeg',
         })
         .addMaxSizeValidator({
-          maxSize: 100000
+          maxSize: 100000000
         })
         .build({
           errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY
@@ -45,6 +45,7 @@ export class ImagesController {
     @Param('Entity Id') entityName: string
   ) {
     const { filename, originalName } = await this.fileStorage.saveFile(file)
+    await this.fileStorage.saveFileToS3(filename, file.buffer)
 
     const symlinkPath = await this.fileStorage.createSymlink(filename)
 
