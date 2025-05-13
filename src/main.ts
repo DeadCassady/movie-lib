@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import 'reflect-metadata';
+import { GlobalExceptionFilter } from './filters/global-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -21,7 +22,7 @@ async function bootstrap() {
       defaultModelExpandDepth: 3,
     },
   });
-
+  app.useGlobalFilters(new GlobalExceptionFilter)
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap().catch((e: Error) => console.log(e));
