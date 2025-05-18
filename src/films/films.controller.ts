@@ -5,6 +5,7 @@ import { UpdateFilmDto } from './dto/update-film.dto';
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Film } from './entities/film.entity';
 import { CustomInterceptors } from 'src/interceptors/custom.interceptors';
+import { Public } from 'src/decorators/public.decorator';
 
 @ApiTags("Films")
 @Controller('films')
@@ -19,6 +20,7 @@ export class FilmsController {
     return this.filmsService.create(createFilmDto);
   }
 
+  @Public()
   @Get()
   @ApiOperation({ summary: 'Returns a list of all films' })
   @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Film })
@@ -27,7 +29,7 @@ export class FilmsController {
   findAll() {
     return this.filmsService.findAll();
   }
-
+  @Public()
   @Get(':id')
   @ApiOperation({ summary: 'Returns a Film with specified id' })
   @ApiParam({ name: 'id', required: true, description: 'Film identifier' })

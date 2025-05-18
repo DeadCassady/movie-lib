@@ -8,6 +8,10 @@ import { VehiclesModule } from './vehicles/vehicles.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataLoaderModule } from './data-loader/data-loader.module';
 import { ImageModule } from './image-upload/image.module';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtAuthGuard } from './auth/jwt-auth.guard';
+import { AppController } from './app.controller';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -28,7 +32,9 @@ import { ImageModule } from './image-upload/image.module';
     VehiclesModule,
     SpeciesModule,
     DataLoaderModule,
-    ImageModule
+    ImageModule,
+    AuthModule
   ],
+  controllers: [AppController],
 })
 export class AppModule { }
