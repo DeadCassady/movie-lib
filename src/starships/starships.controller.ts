@@ -16,6 +16,7 @@ import { UpdateStarshipDto } from './dto/update-starship.dto';
 import { ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
 import { Starship } from './entities/starship.entity';
 import { CustomInterceptors } from 'src/interceptors/custom.interceptors';
+import { Roles } from 'src/decorators/roles.decorator';
 
 @Controller('starships')
 export class StarshipsController {
@@ -29,6 +30,7 @@ export class StarshipsController {
     type: Starship,
   })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
+  @Roles(['admin'])
   create(@Body() updateStarshipDto: CreateStarshipDto) {
     return this.starshipsService.create(updateStarshipDto);
   }
@@ -42,6 +44,7 @@ export class StarshipsController {
   })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   @UseInterceptors(CustomInterceptors)
+  @Roles(['user', 'admin'])
   findAll() {
     return this.starshipsService.findAll();
   }
@@ -55,6 +58,7 @@ export class StarshipsController {
     type: Starship,
   })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
+  @Roles(['user', 'admin'])
   findOne(@Param('id', new ParseIntPipe()) id: string) {
     return this.starshipsService.findOne(+id);
   }
@@ -68,6 +72,7 @@ export class StarshipsController {
     type: Starship,
   })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
+  @Roles(['admin'])
   update(
     @Param('id', new ParseIntPipe()) id: string,
     @Body() updateStarshipDto: UpdateStarshipDto,
@@ -84,6 +89,7 @@ export class StarshipsController {
     type: Starship,
   })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
+  @Roles(['admin'])
   remove(@Param('id', new ParseIntPipe()) id: string) {
     return this.starshipsService.remove(+id);
   }

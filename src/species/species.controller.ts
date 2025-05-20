@@ -5,6 +5,7 @@ import { UpdateSpeciesDto } from './dto/update-species.dto';
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Specie } from './entities/species.entity';
 import { CustomInterceptors } from 'src/interceptors/custom.interceptors';
+import { Roles } from 'src/decorators/roles.decorator';
 
 @ApiTags('Species')
 @Controller('species')
@@ -15,6 +16,7 @@ export class SpeciesController {
   @ApiOperation({ summary: 'Creates a Specie' })
   @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Specie })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
+  @Roles(['admin'])
   create(@Body() createSpeciesDto: CreateSpeciesDto) {
     return this.speciesService.create(createSpeciesDto);
   }
@@ -24,6 +26,7 @@ export class SpeciesController {
   @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Specie })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   @UseInterceptors(CustomInterceptors)
+  @Roles(['user', 'admin'])
   findAll() {
     return this.speciesService.findAll();
   }
@@ -34,6 +37,7 @@ export class SpeciesController {
   @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Specie })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   @UseInterceptors(CustomInterceptors)
+  @Roles(['user', 'admin'])
   findOne(@Param('id', new ParseIntPipe()) id: string) {
     return this.speciesService.findOne(+id);
   }
@@ -43,6 +47,7 @@ export class SpeciesController {
   @ApiParam({ name: 'id', required: true, description: 'Specie identifier' })
   @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Specie })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
+  @Roles(['admin'])
   update(
     @Param('id', new ParseIntPipe()) id: string,
     @Body() updateSpeciesDto: UpdateSpeciesDto,
@@ -55,6 +60,7 @@ export class SpeciesController {
   @ApiParam({ name: 'id', required: true, description: 'Specie identifier' })
   @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Specie })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
+  @Roles(['admin'])
   remove(@Param('id', new ParseIntPipe()) id: string) {
     return this.speciesService.remove(+id)
   }

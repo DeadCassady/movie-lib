@@ -6,6 +6,7 @@ import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Film } from './entities/film.entity';
 import { CustomInterceptors } from 'src/interceptors/custom.interceptors';
 import { Public } from 'src/decorators/public.decorator';
+import { Roles } from 'src/decorators/roles.decorator';
 
 @ApiTags("Films")
 @Controller('films')
@@ -16,6 +17,7 @@ export class FilmsController {
   @ApiOperation({ summary: 'Creates a film' })
   @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Film })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
+  @Roles(['admin'])
   create(@Body() createFilmDto: CreateFilmDto) {
     return this.filmsService.create(createFilmDto);
   }
@@ -26,6 +28,7 @@ export class FilmsController {
   @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Film })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   @UseInterceptors(CustomInterceptors)
+  @Roles(['user', 'admin'])
   findAll() {
     return this.filmsService.findAll();
   }
@@ -36,6 +39,7 @@ export class FilmsController {
   @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Film })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   @UseInterceptors(CustomInterceptors)
+  @Roles(['user', 'admin'])
   findOne(@Param('id', new ParseIntPipe()) id: string) {
     return this.filmsService.findOne(+id);
   }
@@ -45,6 +49,7 @@ export class FilmsController {
   @ApiParam({ name: 'id', required: true, description: 'Film identifier' })
   @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Film })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
+  @Roles(['admin'])
   update(
     @Param('id', new ParseIntPipe()) id: string,
     @Body() updateFilmDto: UpdateFilmDto,
@@ -57,6 +62,7 @@ export class FilmsController {
   @ApiParam({ name: 'id', required: true, description: 'Film identifier' })
   @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Film })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
+  @Roles(['admin'])
   remove(@Param('id', new ParseIntPipe()) id: string) {
     return this.filmsService.remove(+id)
   }

@@ -5,6 +5,7 @@ import { UpdateVehicleDto } from './dto/update-vehicle.dto';
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Vehicle } from './entities/vehicle.entity';
 import { CustomInterceptors } from 'src/interceptors/custom.interceptors';
+import { Roles } from 'src/decorators/roles.decorator';
 
 @ApiTags('vehicles')
 @Controller('vehicles')
@@ -15,6 +16,7 @@ export class VehiclesController {
   @ApiOperation({ summary: 'Creates a Vehicle' })
   @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Vehicle })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
+  @Roles(['admin'])
   create(@Body() createVehicleDto: CreateVehicleDto) {
     return this.vehiclesService.create(createVehicleDto);
   }
@@ -24,6 +26,7 @@ export class VehiclesController {
   @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Vehicle })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   @UseInterceptors(CustomInterceptors)
+  @Roles(['user', 'admin'])
   findAll() {
     return this.vehiclesService.findAll();
   }
@@ -34,6 +37,7 @@ export class VehiclesController {
   @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Vehicle })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   @UseInterceptors(CustomInterceptors)
+  @Roles(['user', 'admin'])
   findOne(@Param('id', new ParseIntPipe()) id: string) {
     return this.vehiclesService.findOne(+id);
   }
@@ -43,6 +47,7 @@ export class VehiclesController {
   @ApiParam({ name: 'id', required: true, description: 'Vehicle identifier' })
   @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Vehicle })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
+  @Roles(['admin'])
   update(
     @Param('id', new ParseIntPipe()) id: string,
     @Body() updateVehicleDto: UpdateVehicleDto,
@@ -55,6 +60,7 @@ export class VehiclesController {
   @ApiParam({ name: 'id', required: true, description: 'Vehicle identifier' })
   @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Vehicle })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
+  @Roles(['admin'])
   remove(@Param('id', new ParseIntPipe()) id: string) {
     return this.vehiclesService.remove(+id)
   }
