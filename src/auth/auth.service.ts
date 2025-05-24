@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
@@ -16,29 +16,18 @@ export class AuthService {
 
   async register(createUserDto: CreateUserDto) {
     const user = await this.usersService.create(createUserDto)
-    return this.login(user)
+    return user
 
   }
 
   async validateUser(username: string, pass: string): Promise<any> {
     const user = await this.usersService.findOne(username);
-    if (user && user.password === pass) {
+    if (!user) throw new NotFoundException("User not found")
+    if (user.password === pass) {
       const { password, ...result } = user;
-      return result;
-    }
-    return null;
-  }
-
-  async login(data: any) {
-    const user = await this.usersService.findOne(data.name)
-    if (data.password === user?.password) {
-
-      const payload = { username: user?.name, sub: user?.id };
-      return {
-        access_token: this.jwtService.sign(payload, { secret: jwtConstants.secret }),
-      };
+      return this.jwtService.sign(result)
     } else {
-      throw new NotFoundException("Unknown user")
+      throw new HttpException("Invalid credentials", 401)
     }
   }
 }

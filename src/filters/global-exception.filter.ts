@@ -12,7 +12,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
     let message = 'Internal Server Error';
     let details: unknown = null;
 
-    // Обробка стандартних HttpException
+    // for an unusual HttpException
     if (exception instanceof HttpException) {
       status = exception.getStatus();
       const exceptionResponse = exception.getResponse();
@@ -21,7 +21,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
         : (exceptionResponse as any).message || exceptionResponse;
       details = (exceptionResponse as any).error || null;
     }
-    // Обробка нестандартних помилок (наприклад, TypeError, DatabaseError)
+    // for the unusual errors( TypeError, DatabaseError)
     else if (exception instanceof Error) {
       message = exception.message;
       details = process.env.NODE_ENV === 'development'
@@ -29,14 +29,14 @@ export class GlobalExceptionFilter implements ExceptionFilter {
         : null;
     }
 
-    // Логування помилки (можна підключити Winston або інший логер)
+    // Logging the error (можна підключити Winston або інший логер)
     console.error(`[${new Date().toISOString()}] Error: ${message}`, {
       path: request.url,
       method: request.method,
       details: exception,
     });
 
-    // Відправка відповіді клієнту
+    // for sending a response 
     response.status(status).json({
       statusCode: status,
       timestamp: new Date().toISOString(),

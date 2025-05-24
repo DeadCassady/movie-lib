@@ -1,9 +1,9 @@
-import { Controller, Get, Post, UseGuards, HttpStatus, Body, Res } from '@nestjs/common';
+import { Controller, Get, Post, HttpStatus, Body, Res, UseGuards, Req } from '@nestjs/common';
 import { AuthService } from './auth/auth.service';
-import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from './users/dto/create-user.dto';
 import { Response } from 'express';
+import { JwtAuthGuard } from './auth/jwt-auth.guard';
 
 @ApiTags("Auth")
 @Controller()
@@ -15,21 +15,20 @@ export class AppController {
   @ApiOperation({ summary: 'Register' })
   @ApiResponse({ status: HttpStatus.OK, description: 'Success' })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
-  async register(@Body() user: CreateUserDto) {
-    return this.authService.register(user);
+  async register(@Body() dto: CreateUserDto) {
+    const user = this.authService.register(dto);
+    return user
   }
 
   @Post('auth/login')
   @ApiOperation({ summary: 'Login' })
   @ApiResponse({ status: HttpStatus.OK, description: 'Success' })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
-  async login(@Body() req: CreateUserDto) {
-    console.log(req);
-    return this.authService.login(req);
+  async login(@Body() dto: CreateUserDto) {
+    return this.authService.validateUser(dto.name, dto.password);
   }
 
   @Post('auth/logout')
-  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Logout' })
   @ApiResponse({ status: HttpStatus.OK, description: 'Success' })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
@@ -43,7 +42,7 @@ export class AppController {
   @ApiOperation({ summary: 'Returns a profile' })
   @ApiResponse({ status: HttpStatus.OK, description: 'Success' })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
-  getProfile() {
+  getProfile(@Req() req: Request) {
     return this.authService.getUsers()
   }
 
