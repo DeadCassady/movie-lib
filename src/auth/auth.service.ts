@@ -2,7 +2,6 @@ import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
-import { jwtConstants } from './constants';
 
 @Injectable()
 export class AuthService {
@@ -20,10 +19,11 @@ export class AuthService {
 
   }
 
-  async validateUser(username: string, pass: string): Promise<any> {
-    const user = await this.usersService.findOne(username);
+  async validateUser(payload: CreateUserDto): Promise<any> {
+    const { name, password } = payload
+    const user = await this.usersService.findOne(name);
     if (!user) throw new NotFoundException("User not found")
-    if (user.password === pass) {
+    if (user.password === password) {
       const { password, ...result } = user;
       return this.jwtService.sign(result)
     } else {

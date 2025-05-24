@@ -15,5 +15,8 @@ export class User {
   @ApiProperty({ description: 'This is the name of the starship', nullable: false })
   @Column()
   email: string;
+  @ApiProperty({ description: 'User role', nullable: false })
+  @Column()
+  role:
 
 }

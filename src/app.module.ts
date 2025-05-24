@@ -1,15 +1,14 @@
 import { Module } from '@nestjs/common';
-import { PeopleModule } from './people/people.module';
-import { PlanetsModule } from './planets/planets.module';
-import { StarshipsModule } from './starships/starships.module';
-import { SpeciesModule } from './species/species.module';
-import { FilmsModule } from './films/films.module';
-import { VehiclesModule } from './vehicles/vehicles.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataLoaderModule } from './data-loader/data-loader.module';
 import { ImageModule } from './image-upload/image.module';
-import { AppController } from './app.controller';
 import { AuthModule } from './auth/auth.module';
+import { PeopleModule } from './db-entities/people/people.module';
+import { PlanetsModule } from './db-entities/planets/planets.module';
+import { StarshipsModule } from './db-entities/starships/starships.module';
+import { FilmsModule } from './db-entities/films/films.module';
+import { VehiclesModule } from './db-entities/vehicles/vehicles.module';
+import { SpeciesModule } from './db-entities/species/species.module';
 
 @Module({
   imports: [
@@ -23,6 +22,7 @@ import { AuthModule } from './auth/auth.module';
       synchronize: true,
       dropSchema: true
     }),
+    AuthModule,
     PeopleModule,
     PlanetsModule,
     StarshipsModule,
@@ -31,8 +31,6 @@ import { AuthModule } from './auth/auth.module';
     SpeciesModule,
     DataLoaderModule,
     ImageModule,
-    AuthModule
   ],
-  controllers: [AppController],
 })
 export class AppModule { }

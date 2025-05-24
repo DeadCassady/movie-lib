@@ -10,8 +10,16 @@ async function bootstrap() {
     .setTitle('My API') // Назва API
     .setDescription(`It's an API for navigating a movie library`) // Опис
     .setVersion('1.0') // Версія
-    .addTag('movie lib') // Теги для групування ендпоінтів
-    .addBearerAuth() // Підтримка Bearer Token (якщо є автентифікація)
+    .addTag('SWAPI Movie Library') // Теги для групування ендпоінтів
+    .addBearerAuth({
+      type: 'http',
+      scheme: 'bearer',
+      bearerFormat: 'JWT',
+      name: 'JWT',
+      description: 'Enter JWT token',
+      in: 'header',
+    },
+      'JWT-auth',)
     .build();
 
   const document = SwaggerModule.createDocument(app, swaggerConfig);

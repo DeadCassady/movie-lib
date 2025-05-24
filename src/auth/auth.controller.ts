@@ -1,13 +1,12 @@
-import { Controller, Get, Post, HttpStatus, Body, Res, UseGuards, Req } from '@nestjs/common';
-import { AuthService } from './auth/auth.service';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { CreateUserDto } from './users/dto/create-user.dto';
-import { Response } from 'express';
-import { JwtAuthGuard } from './auth/jwt-auth.guard';
+import { Body, Controller, Get, HttpStatus, Post, Req, Res, UseGuards } from "@nestjs/common";
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { CreateUserDto } from "src/users/dto/create-user.dto";
+import { AuthService } from "./auth.service";
+import { JwtAuthGuard } from "./jwt-auth.guard";
 
 @ApiTags("Auth")
 @Controller()
-export class AppController {
+export class AuthController {
 
   constructor(private authService: AuthService) { }
 
@@ -16,8 +15,7 @@ export class AppController {
   @ApiResponse({ status: HttpStatus.OK, description: 'Success' })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   async register(@Body() dto: CreateUserDto) {
-    const user = this.authService.register(dto);
-    return user
+    return this.authService.register(dto);
   }
 
   @Post('auth/login')
@@ -25,7 +23,7 @@ export class AppController {
   @ApiResponse({ status: HttpStatus.OK, description: 'Success' })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   async login(@Body() dto: CreateUserDto) {
-    return this.authService.validateUser(dto.name, dto.password);
+    return this.authService.validateUser(dto);
   }
 
   @Post('auth/logout')
@@ -33,12 +31,12 @@ export class AppController {
   @ApiResponse({ status: HttpStatus.OK, description: 'Success' })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   async logout(@Res({ passthrough: true }) response: Response) {
-    response.clearCookie('jwt')
     return { message: "Logout successful" }
   }
 
   @Get('profile')
   @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('JWT-auth')
   @ApiOperation({ summary: 'Returns a profile' })
   @ApiResponse({ status: HttpStatus.OK, description: 'Success' })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })

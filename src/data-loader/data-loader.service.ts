@@ -9,6 +9,7 @@ import { Starship } from "src/starships/entities/starship.entity";
 import { Vehicle } from "src/vehicles/entities/vehicle.entity";
 import { Repository } from "typeorm";
 import { https } from "follow-redirects";
+import { User } from "src/users/entities/user.entity";
 
 @Injectable()
 export class DataLoaderService implements OnApplicationBootstrap {
@@ -24,7 +25,9 @@ export class DataLoaderService implements OnApplicationBootstrap {
     @InjectRepository(Starship)
     private readonly starshipsRepository: Repository<Starship>,
     @InjectRepository(Vehicle)
-    private readonly vehicleRepository: Repository<Vehicle>
+    private readonly vehicleRepository: Repository<Vehicle>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>
   ) { }
   async onApplicationBootstrap() {
     await this.loadAllData()
@@ -112,7 +115,7 @@ export class DataLoaderService implements OnApplicationBootstrap {
     console.log(`Initialized ${peopleEntities.length} people`)
 
     console.log("Initializing species..")
-    const speciesEntities = await Promise.all(species.map(async (data) => {
+    const speciesEntities = await Promise.all(species.map(async (data: any) => {
       const specie = new Specie()
 
       const homeworld = await this.planetsRepository.findOneBy({
@@ -128,7 +131,13 @@ export class DataLoaderService implements OnApplicationBootstrap {
       Object.assign(specie, data, { homeworld })
       return this.speciesRepository.save(specie)
     }))
+
     console.log(`Initialized ${speciesEntities.length} species`)
+
+    console.log("Creating admin role")
+    const admin = new User()
+    Object.assign(admin, { username: "loh", password: "loh", email: "loh", role: "admin" })
+    this.userRepository.save(admin)
   }
 }
 
