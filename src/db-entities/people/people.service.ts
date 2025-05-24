@@ -4,12 +4,12 @@ import { UpdatePersonDto } from './dto/update-person.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Person } from './entities/person.entity';
 import { Repository } from 'typeorm';
-import { Planet } from 'src/planets/entities/planet.entity';
-import { Vehicle } from 'src/vehicles/entities/vehicle.entity';
-import { Starship } from 'src/starships/entities/starship.entity';
-import { Specie } from 'src/species/entities/species.entity';
-import { Film } from 'src/films/entities/film.entity';
 import { TransformPersonDto } from './dto/transform-person.dto';
+import { Planet } from '../planets/entities/planet.entity';
+import { Vehicle } from '../vehicles/entities/vehicle.entity';
+import { Starship } from '../starships/entities/starship.entity';
+import { Specie } from '../species/entities/species.entity';
+import { Film } from '../films/entities/film.entity';
 
 @Injectable()
 export class PeopleService {

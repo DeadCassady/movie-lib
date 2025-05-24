@@ -1,5 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Roles } from "../roles/roles.enum";
 
 @Entity()
 export class User {
@@ -17,6 +18,6 @@ export class User {
   email: string;
   @ApiProperty({ description: 'User role', nullable: false })
   @Column()
-  role:
+  role: Roles
 
 }

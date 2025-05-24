@@ -1,15 +1,15 @@
 import { Injectable, OnApplicationBootstrap } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import axios from "axios";
-import { Film } from "src/films/entities/film.entity";
-import { Person } from "src/people/entities/person.entity";
-import { Planet } from "src/planets/entities/planet.entity";
-import { Specie } from "src/species/entities/species.entity";
-import { Starship } from "src/starships/entities/starship.entity";
-import { Vehicle } from "src/vehicles/entities/vehicle.entity";
 import { Repository } from "typeorm";
 import { https } from "follow-redirects";
 import { User } from "src/users/entities/user.entity";
+import { Person } from "src/db-entities/people/entities/person.entity";
+import { Film } from "src/db-entities/films/entities/film.entity";
+import { Planet } from "src/db-entities/planets/entities/planet.entity";
+import { Specie } from "src/db-entities/species/entities/species.entity";
+import { Starship } from "src/db-entities/starships/entities/starship.entity";
+import { Vehicle } from "src/db-entities/vehicles/entities/vehicle.entity";
 
 @Injectable()
 export class DataLoaderService implements OnApplicationBootstrap {
@@ -136,8 +136,9 @@ export class DataLoaderService implements OnApplicationBootstrap {
 
     console.log("Creating admin role")
     const admin = new User()
-    Object.assign(admin, { username: "loh", password: "loh", email: "loh", role: "admin" })
+    Object.assign(admin, { name: "loh", password: "loh", email: "loh", role: "ADMIN" })
     this.userRepository.save(admin)
+    console.log("Admin created")
   }
 }
 

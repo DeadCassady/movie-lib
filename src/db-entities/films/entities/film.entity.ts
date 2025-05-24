@@ -1,11 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Image } from 'src/image-upload/entities/image.entity'
 import { Expose } from 'class-transformer';
-import { Person } from 'src/people/entities/person.entity';
-import { Planet } from 'src/planets/entities/planet.entity';
-import { Specie } from 'src/species/entities/species.entity';
-import { Starship } from 'src/starships/entities/starship.entity';
-import { Vehicle } from 'src/vehicles/entities/vehicle.entity';
 import {
   AfterLoad,
   Column,
@@ -14,6 +9,11 @@ import {
   ManyToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Specie } from 'src/db-entities/species/entities/species.entity';
+import { Vehicle } from 'src/db-entities/vehicles/entities/vehicle.entity';
+import { Starship } from 'src/db-entities/starships/entities/starship.entity';
+import { Planet } from 'src/db-entities/planets/entities/planet.entity';
+import { Person } from 'src/db-entities/people/entities/person.entity';
 
 const url = 'http://localhost:3000/api#/films/'
 

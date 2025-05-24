@@ -4,12 +4,12 @@ import { UpdateFilmDto } from './dto/update-film.dto';
 import { Film } from './entities/film.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Person } from 'src/people/entities/person.entity';
-import { Planet } from 'src/planets/entities/planet.entity';
-import { Starship } from 'src/starships/entities/starship.entity';
-import { Specie } from 'src/species/entities/species.entity';
-import { Vehicle } from 'src/vehicles/entities/vehicle.entity';
 import { TransformFilmDto } from './dto/transform-film.dto';
+import { Person } from '../people/entities/person.entity';
+import { Planet } from '../planets/entities/planet.entity';
+import { Starship } from '../starships/entities/starship.entity';
+import { Vehicle } from '../vehicles/entities/vehicle.entity';
+import { Specie } from '../species/entities/species.entity';
 
 @Injectable()
 export class FilmsService {

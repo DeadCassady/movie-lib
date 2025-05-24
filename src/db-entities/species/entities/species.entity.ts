@@ -1,9 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Image } from 'src/image-upload/entities/image.entity'
 import { Expose } from 'class-transformer';
-import { Person } from 'src/people/entities/person.entity';
-import { Planet } from 'src/planets/entities/planet.entity';
-import { Film } from 'src/films/entities/film.entity'
 import {
   AfterLoad,
   Column,
@@ -15,6 +12,9 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Planet } from 'src/db-entities/planets/entities/planet.entity';
+import { Person } from 'src/db-entities/people/entities/person.entity';
+import { Film } from 'src/db-entities/films/entities/film.entity';
 
 const url = 'http://localhost:3000/api#/species/'
 

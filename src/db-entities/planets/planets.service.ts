@@ -4,10 +4,9 @@ import { UpdatePlanetDto } from './dto/update-planet.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Planet } from './entities/planet.entity';
 import { Repository } from 'typeorm';
-import { Person } from 'src/people/entities/person.entity';
-import { Film } from 'src/films/entities/film.entity';
-import { TransformStarshipDto } from 'src/starships/dto/transform-starship.dto';
 import { TransformPlanetDto } from './dto/transform-planet.dto';
+import { Person } from '../people/entities/person.entity';
+import { Film } from '../films/entities/film.entity';
 
 @Injectable()
 export class PlanetsService {

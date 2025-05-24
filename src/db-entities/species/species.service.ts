@@ -3,11 +3,11 @@ import { CreateSpeciesDto } from './dto/create-species.dto';
 import { UpdateSpeciesDto } from './dto/update-species.dto';
 import { Specie } from './entities/species.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Person } from 'src/people/entities/person.entity';
-import { Film } from 'src/films/entities/film.entity';
 import { Repository } from 'typeorm';
-import { Planet } from 'src/planets/entities/planet.entity';
 import { TransformSpeciesDto } from './dto/transform-species.dto';
+import { Planet } from '../planets/entities/planet.entity';
+import { Person } from '../people/entities/person.entity';
+import { Film } from '../films/entities/film.entity';
 
 @Injectable()
 export class SpeciesService {

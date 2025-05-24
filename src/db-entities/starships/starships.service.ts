@@ -4,9 +4,9 @@ import { UpdateStarshipDto } from './dto/update-starship.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Starship } from './entities/starship.entity';
 import { Repository } from 'typeorm';
-import { Person } from 'src/people/entities/person.entity';
-import { Film } from 'src/films/entities/film.entity';
 import { TransformStarshipDto } from './dto/transform-starship.dto';
+import { Person } from '../people/entities/person.entity';
+import { Film } from '../films/entities/film.entity';
 
 @Injectable()
 export class StarshipsService {

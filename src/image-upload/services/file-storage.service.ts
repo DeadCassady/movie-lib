@@ -2,12 +2,10 @@
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import { S3 } from "aws-sdk";
 import { symlink, writeFile } from "fs";
 import { ensureDir, remove } from "fs-extra";
 import path, { join } from "path";
 import { v4 as uuidv4 } from 'uuid';
-import * as dotenv from 'dotenv';
 
 @Injectable()
 export class FileStorage {

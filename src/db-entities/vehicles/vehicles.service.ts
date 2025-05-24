@@ -2,11 +2,11 @@ import { Injectable, InternalServerErrorException, NotFoundException } from '@ne
 import { CreateVehicleDto } from './dto/create-vehicle.dto';
 import { UpdateVehicleDto } from './dto/update-vehicle.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Film } from 'src/films/entities/film.entity';
-import { Person } from 'src/people/entities/person.entity';
 import { Repository } from 'typeorm';
 import { Vehicle } from './entities/vehicle.entity';
 import { TransformVehicleDto } from './dto/transfortm-vehicle.dto';
+import { Film } from '../films/entities/film.entity';
+import { Person } from '../people/entities/person.entity';
 
 @Injectable()
 export class VehiclesService {
