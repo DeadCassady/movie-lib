@@ -9,16 +9,21 @@ import {
   HttpStatus,
   ParseIntPipe,
   UseInterceptors,
+  UseGuards,
 } from '@nestjs/common';
 import { PlanetsService } from './planets.service';
 import { CreatePlanetDto } from './dto/create-planet.dto';
 import { UpdatePlanetDto } from './dto/update-planet.dto';
-import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Planet } from './entities/planet.entity';
 import { CustomInterceptors } from 'src/interceptors/custom.interceptors';
 import { Roles } from 'src/decorators/roles.decorator';
+import { Role } from 'src/users/roles/roles.enum';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @ApiTags('Planets')
+@UseGuards(JwtAuthGuard)
+@ApiBearerAuth('JWT-auth')
 @Controller('planets')
 export class PlanetsController {
   constructor(private readonly planetsService: PlanetsService) { }
@@ -27,7 +32,7 @@ export class PlanetsController {
   @ApiOperation({ summary: 'Creates a Planet' })
   @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Planet })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
-  @Roles(['admin'])
+  @Roles(Role.ADMIN)
   create(@Body() createPlanetDto: CreatePlanetDto) {
     return this.planetsService.create(createPlanetDto);
   }
@@ -37,7 +42,7 @@ export class PlanetsController {
   @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Planet })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   @UseInterceptors(CustomInterceptors)
-  @Roles(['user', 'admin'])
+  @Roles(Role.ADMIN, Role.USER)
   findAll() {
     return this.planetsService.findAll();
   }
@@ -48,7 +53,7 @@ export class PlanetsController {
   @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Planet })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   @UseInterceptors(CustomInterceptors)
-  @Roles(['user', 'admin'])
+  @Roles(Role.ADMIN, Role.USER)
   findOne(@Param('id', new ParseIntPipe()) id: string) {
     return this.planetsService.findOne(+id);
   }
@@ -58,7 +63,7 @@ export class PlanetsController {
   @ApiParam({ name: 'id', required: true, description: 'Planet identifier' })
   @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Planet })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
-  @Roles(['admin'])
+  @Roles(Role.ADMIN)
   update(
     @Param('id', new ParseIntPipe()) id: string,
     @Body() updatePlanetDto: UpdatePlanetDto,
@@ -71,7 +76,7 @@ export class PlanetsController {
   @ApiParam({ name: 'id', required: true, description: 'Planet identifier' })
   @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Planet })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
-  @Roles(['admin'])
+  @Roles(Role.ADMIN)
   remove(@Param('id', new ParseIntPipe()) id: string) {
     return this.planetsService.remove(+id);
   }

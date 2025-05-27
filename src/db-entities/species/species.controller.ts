@@ -1,13 +1,17 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus, ParseIntPipe, UseInterceptors } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpStatus, ParseIntPipe, UseInterceptors, UseGuards } from '@nestjs/common';
 import { SpeciesService } from './species.service';
 import { CreateSpeciesDto } from './dto/create-species.dto';
 import { UpdateSpeciesDto } from './dto/update-species.dto';
-import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Specie } from './entities/species.entity';
 import { CustomInterceptors } from 'src/interceptors/custom.interceptors';
 import { Roles } from 'src/decorators/roles.decorator';
+import { Role } from 'src/users/roles/roles.enum';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @ApiTags('Species')
+@UseGuards(JwtAuthGuard)
+@ApiBearerAuth('JWT-auth')
 @Controller('species')
 export class SpeciesController {
   constructor(private readonly speciesService: SpeciesService) { }
@@ -16,7 +20,7 @@ export class SpeciesController {
   @ApiOperation({ summary: 'Creates a Specie' })
   @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Specie })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
-  @Roles(['admin'])
+  @Roles(Role.ADMIN)
   create(@Body() createSpeciesDto: CreateSpeciesDto) {
     return this.speciesService.create(createSpeciesDto);
   }
@@ -26,7 +30,7 @@ export class SpeciesController {
   @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Specie })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   @UseInterceptors(CustomInterceptors)
-  @Roles(['user', 'admin'])
+  @Roles(Role.ADMIN, Role.USER)
   findAll() {
     return this.speciesService.findAll();
   }
@@ -37,7 +41,7 @@ export class SpeciesController {
   @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Specie })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   @UseInterceptors(CustomInterceptors)
-  @Roles(['user', 'admin'])
+  @Roles(Role.ADMIN, Role.USER)
   findOne(@Param('id', new ParseIntPipe()) id: string) {
     return this.speciesService.findOne(+id);
   }
@@ -47,7 +51,7 @@ export class SpeciesController {
   @ApiParam({ name: 'id', required: true, description: 'Specie identifier' })
   @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Specie })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
-  @Roles(['admin'])
+  @Roles(Role.ADMIN)
   update(
     @Param('id', new ParseIntPipe()) id: string,
     @Body() updateSpeciesDto: UpdateSpeciesDto,
@@ -60,7 +64,7 @@ export class SpeciesController {
   @ApiParam({ name: 'id', required: true, description: 'Specie identifier' })
   @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Specie })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
-  @Roles(['admin'])
+  @Roles(Role.ADMIN)
   remove(@Param('id', new ParseIntPipe()) id: string) {
     return this.speciesService.remove(+id)
   }

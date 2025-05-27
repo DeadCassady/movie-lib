@@ -9,16 +9,22 @@ import {
   HttpStatus,
   ParseIntPipe,
   UseInterceptors,
+  UseGuards,
 } from '@nestjs/common';
 import { StarshipsService } from './starships.service';
 import { CreateStarshipDto } from './dto/create-starship.dto';
 import { UpdateStarshipDto } from './dto/update-starship.dto';
-import { ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Starship } from './entities/starship.entity';
 import { CustomInterceptors } from 'src/interceptors/custom.interceptors';
 import { Roles } from 'src/decorators/roles.decorator';
+import { Role } from 'src/users/roles/roles.enum';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
-@Controller('starships')
+@ApiTags('Starships')
+@Controller('Starships')
+@UseGuards(JwtAuthGuard)
+@ApiBearerAuth('JWT-auth')
 export class StarshipsController {
   constructor(private readonly starshipsService: StarshipsService) { }
 
@@ -30,7 +36,7 @@ export class StarshipsController {
     type: Starship,
   })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
-  @Roles(['admin'])
+  @Roles(Role.ADMIN)
   create(@Body() updateStarshipDto: CreateStarshipDto) {
     return this.starshipsService.create(updateStarshipDto);
   }
@@ -44,7 +50,7 @@ export class StarshipsController {
   })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   @UseInterceptors(CustomInterceptors)
-  @Roles(['user', 'admin'])
+  @Roles(Role.ADMIN, Role.USER)
   findAll() {
     return this.starshipsService.findAll();
   }
@@ -58,7 +64,7 @@ export class StarshipsController {
     type: Starship,
   })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
-  @Roles(['user', 'admin'])
+  @Roles(Role.ADMIN, Role.USER)
   findOne(@Param('id', new ParseIntPipe()) id: string) {
     return this.starshipsService.findOne(+id);
   }
@@ -72,7 +78,7 @@ export class StarshipsController {
     type: Starship,
   })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
-  @Roles(['admin'])
+  @Roles(Role.ADMIN)
   update(
     @Param('id', new ParseIntPipe()) id: string,
     @Body() updateStarshipDto: UpdateStarshipDto,
@@ -89,7 +95,7 @@ export class StarshipsController {
     type: Starship,
   })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
-  @Roles(['admin'])
+  @Roles(Role.ADMIN)
   remove(@Param('id', new ParseIntPipe()) id: string) {
     return this.starshipsService.remove(+id);
   }

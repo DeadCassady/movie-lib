@@ -9,6 +9,8 @@ import { StarshipsModule } from './db-entities/starships/starships.module';
 import { FilmsModule } from './db-entities/films/films.module';
 import { VehiclesModule } from './db-entities/vehicles/vehicles.module';
 import { SpeciesModule } from './db-entities/species/species.module';
+import { APP_GUARD } from '@nestjs/core';
+import { RolesGuard } from './auth/roles.guard';
 
 @Module({
   imports: [
@@ -32,5 +34,11 @@ import { SpeciesModule } from './db-entities/species/species.module';
     DataLoaderModule,
     ImageModule,
   ],
+  // providers: [
+  //   {
+  //     provide: APP_GUARD,
+  //     useClass: RolesGuard
+  //   }
+  // ]
 })
 export class AppModule { }

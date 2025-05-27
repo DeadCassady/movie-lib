@@ -14,15 +14,18 @@ import {
 import { PeopleService } from './people.service';
 import { CreatePersonDto } from './dto/create-person.dto';
 import { UpdatePersonDto } from './dto/update-person.dto';
-import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Person } from './entities/person.entity';
 import { CustomInterceptors } from 'src/interceptors/custom.interceptors';
-import { RolesGuard } from 'src/auth/roles.guard';
 import { Roles } from 'src/decorators/roles.decorator';
+import { Role } from 'src/users/roles/roles.enum';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { RolesGuard } from 'src/auth/roles.guard';
 
 @ApiTags('People')
+@UseGuards(JwtAuthGuard, RolesGuard)
+@ApiBearerAuth('JWT-auth')
 @Controller('people')
-@UseGuards(RolesGuard)
 export class PeopleController {
   constructor(private readonly peopleService: PeopleService) { }
 
@@ -30,7 +33,7 @@ export class PeopleController {
   @ApiOperation({ summary: 'Creates a person' })
   @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Person })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
-  @Roles(['admin'])
+  @Roles(Role.ADMIN)
   create(@Body() createPersonDto: CreatePersonDto) {
     return this.peopleService.create(createPersonDto);
   }
@@ -40,7 +43,7 @@ export class PeopleController {
   @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Person })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   @UseInterceptors(CustomInterceptors)
-  @Roles(['user', 'admin'])
+  @Roles(Role.USER, Role.ADMIN)
   findAll() {
     return this.peopleService.findAll();
   }
@@ -51,7 +54,7 @@ export class PeopleController {
   @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Person })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   @UseInterceptors(CustomInterceptors)
-  @Roles(['user', 'admin'])
+  @Roles(Role.ADMIN, Role.USER)
   findOne(@Param('id', new ParseIntPipe()) id: string) {
     return this.peopleService.findOne(+id);
   }
@@ -61,7 +64,7 @@ export class PeopleController {
   @ApiParam({ name: 'id', required: true, description: 'person identifier' })
   @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Person })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
-  @Roles(['admin'])
+  @Roles(Role.ADMIN)
   update(
     @Param('id', new ParseIntPipe()) id: string,
     @Body() updatePersonDto: UpdatePersonDto,
@@ -74,7 +77,7 @@ export class PeopleController {
   @ApiParam({ name: 'id', required: true, description: 'person identifier' })
   @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Person })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
-  @Roles(['admin'])
+  @Roles(Role.ADMIN)
   remove(@Param('id', new ParseIntPipe()) id: string) {
     return this.peopleService.remove(+id)
   }

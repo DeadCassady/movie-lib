@@ -2,6 +2,7 @@ import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import { User } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class AuthService {
@@ -14,8 +15,10 @@ export class AuthService {
   }
 
   async register(createUserDto: CreateUserDto) {
-    const user = await this.usersService.create(createUserDto)
-    return user
+    const user = new User
+    Object.assign(user, createUserDto, { role: 'USER' })
+    const newUser = await this.usersService.create(user)
+    return this.validateUser(newUser)
 
   }
 
@@ -25,6 +28,7 @@ export class AuthService {
     if (!user) throw new NotFoundException("User not found")
     if (user.password === password) {
       const { password, ...result } = user;
+      console.log(result)
       return this.jwtService.sign(result)
     } else {
       throw new HttpException("Invalid credentials", 401)
