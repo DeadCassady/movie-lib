@@ -8,9 +8,10 @@ import { CustomInterceptors } from 'src/interceptors/custom.interceptors';
 import { Roles } from 'src/decorators/roles.decorator';
 import { Role } from 'src/users/roles/roles.enum';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { RolesGuard } from 'src/auth/roles.guard';
 
 @ApiTags('Species')
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, RolesGuard)
 @ApiBearerAuth('JWT-auth')
 @Controller('species')
 export class SpeciesController {

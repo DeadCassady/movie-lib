@@ -8,10 +8,11 @@ import { Roles } from 'src/decorators/roles.decorator';
 import { VehiclesService } from './vehicles.service';
 import { Role } from 'src/users/roles/roles.enum';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { RolesGuard } from 'src/auth/roles.guard';
 
 @ApiTags('vehicles')
 @Controller('vehicles')
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, RolesGuard)
 @ApiBearerAuth('JWT-auth')
 export class VehiclesController {
   constructor(private readonly vehiclesService: VehiclesService) { }

@@ -35,7 +35,8 @@ export class PeopleController {
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   @Roles(Role.ADMIN)
   create(@Body() createPersonDto: CreatePersonDto) {
-    return this.peopleService.create(createPersonDto);
+    // return this.peopleService.create(createPersonDto);
+    return "Ya loh"
   }
 
   @Get()
