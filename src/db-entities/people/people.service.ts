@@ -183,7 +183,7 @@ export class PeopleService {
         where: { title: DTO }
       }).then((data) => {
         if (!data) {
-          throw new NotFoundException(`The specie ${DTO} was not found`)
+          throw new NotFoundException(`The film ${DTO} was not found`)
         } else {
           return data
         }
@@ -201,7 +201,7 @@ export class PeopleService {
   async remove(id: number): Promise<void> {
     const result = await this.peopleRepository.delete(id);
     if (result.affected === 0) {
-      throw new NotFoundException(`dto with ID ${id} not found`);
+      throw new NotFoundException(`person with ID ${id} not found`);
     }
   }
 }

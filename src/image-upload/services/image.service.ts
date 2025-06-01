@@ -30,7 +30,7 @@ export class ImageService {
   ) { }
   async create(dto: CreateImageDto) {
     const image = new Image
-    Object.assign(image, { filename: dto.filename, originalName: dto.originalName, pathc: dto.path })
+    Object.assign(image, { filename: dto.filename, originalName: dto.originalName, path: dto.path })
     switch (dto.entityType) {
       case 'planet':
         image.planet = await this.planetsRepository.findOne({ where: { name: dto.entityName } }).then((data) => {

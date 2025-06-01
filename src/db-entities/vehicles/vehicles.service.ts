@@ -112,7 +112,10 @@ export class VehiclesService {
     return vehicle
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} vehicle`;
+  async remove(id: number) {
+    const result = await this.vehicleRepository.delete(id)
+    if (result.affected === 0) {
+      throw new NotFoundException(`vehicle with ID ${id} not found`)
+    }
   }
 }

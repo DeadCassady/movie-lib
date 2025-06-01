@@ -125,7 +125,7 @@ export class FilmsService {
     }
   }
 
-  async transform(dto: UpdateFilmDto) {
+  private async transform(dto: UpdateFilmDto) {
     const film = new TransformFilmDto
     const planets = dto.planets?.map(async (DTO) => {
       return await this.planetsRepository.findOne({
@@ -193,7 +193,10 @@ export class FilmsService {
     return film
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} film`;
+  async remove(id: number): Promise<void> {
+    const result = await this.peopleRepository.delete(id);
+    if (result.affected === 0) {
+      throw new NotFoundException(`film with ID ${id} not found`)
+    }
   }
 }

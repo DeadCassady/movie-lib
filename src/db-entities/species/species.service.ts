@@ -135,7 +135,10 @@ export class SpeciesService {
     return specie
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} species`;
+  async remove(id: number): Promise<void> {
+    const result = await this.speciesRepository.delete(id)
+    if (result.affected === 0) {
+      throw new NotFoundException(`Specie with ID ${id} not found`)
+    }
   }
 }
