@@ -28,10 +28,10 @@ export class Person {
   name: string;
   @ApiProperty({ description: "This is the person's height", nullable: false })
   @Column()
-  height: number;
+  height: string;
   @ApiProperty({ description: "This is the person's mass", nullable: false })
   @Column()
-  mass: number;
+  mass: string;
   @ApiProperty({ description: 'This field defined the hair color', nullable: false })
   @Column()
   hair_color: string;

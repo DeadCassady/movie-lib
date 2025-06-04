@@ -6,6 +6,7 @@ import { Starship } from './entities/starship.entity';
 import { Repository } from 'typeorm';
 import { TransformStarshipDto } from './dto/transform-starship.dto';
 import { Person } from '../people/entities/person.entity';
+import { Film } from '../films/entities/film.entity';
 
 @Injectable()
 export class StarshipsService {

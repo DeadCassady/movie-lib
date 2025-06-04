@@ -10,6 +10,7 @@ import { Planet } from "src/db-entities/planets/entities/planet.entity";
 import { Specie } from "src/db-entities/species/entities/species.entity";
 import { Starship } from "src/db-entities/starships/entities/starship.entity";
 import { Vehicle } from "src/db-entities/vehicles/entities/vehicle.entity";
+import { response } from "express";
 
 @Injectable()
 export class DataLoaderService implements OnApplicationBootstrap {
@@ -37,67 +38,100 @@ export class DataLoaderService implements OnApplicationBootstrap {
     rejectUnauthorized: false
   })
 
-  async load<T>(type: string) {
-    const entities: T[] = [];
-    let index = 1;
-    while (true) {
-      const entity: T = await axios.get(`https://swapi.dev/api/${type}/${index}`, { httpsAgent: this.agent }).then(data => data.data.results).catch(error => error)
-
-      if (!entity) {
-        break
-      }
-      index++
-      entities.push(entity)
-    }
-    return entities
-  }
-
   async loadAllData() {
-
-    const vehicles = await axios.get(`https://swapi.dev/api/vehicles/`, { httpsAgent: this.agent }).then(data => data.data.results)
-    const people = await axios.get('https://swapi.dev/api/people/', { httpsAgent: this.agent }).then(data => data.data.results)
-    const films = await axios.get('https://swapi.dev/api/films/', { httpsAgent: this.agent }).then(data => data.data.results)
-    const planets = await axios.get('https://swapi.dev/api/planets/', { httpsAgent: this.agent }).then(data => data.data.results)
-    const species = await axios.get('https://swapi.dev/api/species/', { httpsAgent: this.agent }).then(data => data.data.results)
-    const starships = await axios.get('https://swapi.dev/api/starships/', { httpsAgent: this.agent }).then(data => data.data.results)
+    const vehiclesUrl = 'https://swapi.dev/api/vehicles'
+    const filmsUrl = 'https://swapi.dev/api/films/?page=1'
+    const starshipsUrl = 'https://swapi.dev/api/starships/?page=1'
+    const planetsUrl = 'https://swapi.dev/api/planets/?page=1'
+    const peopleUrl = 'https://swapi.dev/api/people/?page=1'
+    const speciesUrl = 'https://swapi.dev/api/species/?page=1'
 
     console.log("Initializing vehicles..")
-    const vehicleEntities = await Promise.all(vehicles.map((data: Vehicle) => {
+    await this.loadVehicles(vehiclesUrl)
+
+    console.log("Initializing films..")
+    await this.loadFilms(filmsUrl)
+
+    console.log("Initializing starships..")
+    await this.loadStarships(starshipsUrl)
+
+    console.log("Initializing planets..")
+    await this.loadPlanets(planetsUrl)
+
+    console.log("Initializing people..")
+    await this.loadPeople(peopleUrl)
+
+    console.log("Initializing species..")
+    await this.loadSpecies(speciesUrl)
+
+
+    console.log("Creating admin role")
+    const admin = new User()
+    Object.assign(admin, { name: "loh", password: "loh", email: "loh", role: "ADMIN" })
+    this.userRepository.save(admin)
+    console.log("Admin created")
+  }
+
+  async loadVehicles(url: string) {
+    const vehicles = await axios.get(url, { httpsAgent: this.agent }).then(response => response.data)
+
+    const vehicleEntities = await Promise.all(vehicles.results.map((data: Vehicle) => {
       const vehicle = new Vehicle()
       Object.assign(vehicle, data)
       return this.vehicleRepository.save(vehicle)
     }))
-    console.log(`Initialized ${vehicleEntities.length} vehicles`)
+    if (vehicles.next) {
+      this.loadVehicles(vehicles.next)
+    }
+    return vehicleEntities.length
+  }
 
-    console.log("Initializing films..")
-    const filmsEntities = await Promise.all(films.map((data: Film) => {
+  async loadFilms(url: string) {
+    const films = await axios.get(url, { httpsAgent: this.agent }).then(response => response.data)
+
+    const filmsEntities = await Promise.all(films.results.map((data: Film) => {
       const film = new Film()
       Object.assign(film, data)
       return this.filmsRepository.save(film)
     }))
-    console.log(`Initialized ${filmsEntities.length} films`)
+    if (films.next) {
+      this.loadFilms(films.next)
+    }
+    return filmsEntities.length
+  }
 
+  async loadStarships(url: string) {
+    const starships = await axios.get(url, { httpsAgent: this.agent }).then(response => response.data)
 
-    console.log("Initializing starships..")
-    const starshipsEntities = await Promise.all(starships.map((data: Starship) => {
+    const starshipsEntities = await Promise.all(starships.results.map((data: Starship) => {
       const starship = new Starship()
       Object.assign(starship, data)
       return this.starshipsRepository.save(starship)
     }))
-    console.log(`Initialized ${starshipsEntities.length} starships`)
+    if (starships.next) {
+      this.loadStarships(starships.next)
+    }
+    return starshipsEntities.length
+  }
 
+  async loadPlanets(url: string) {
+    const planets = await axios.get(url, { httpsAgent: this.agent }).then(response => response.data)
 
-    console.log("Initializing planets..")
-    const planetsEntities = await Promise.all(planets.map((data: Planet) => {
+    const planetsEntities = await Promise.all(planets.results.map((data: Planet) => {
       const planets = new Planet()
       Object.assign(planets, data)
       return this.planetsRepository.save(planets)
     }))
-    console.log(`Initialized ${planetsEntities.length} planets`)
+    if (planets.next) {
+      this.loadPlanets(planets.next)
+    }
+    return planetsEntities.length
+  }
 
+  async loadPeople(url: string) {
+    const people = await axios.get(url, { httpsAgent: this.agent }).then(response => response.data)
 
-    console.log("Initializing people..")
-    const peopleEntities = await Promise.all(people.map(async (data) => {
+    const peopleEntities = await Promise.all(people.results.map(async (data: any) => {
       const person = new Person()
 
       const homeworld = await this.planetsRepository.findOneBy({
@@ -112,10 +146,17 @@ export class DataLoaderService implements OnApplicationBootstrap {
       Object.assign(person, data, { homeworld })
       return this.personRepository.save(person)
     }))
-    console.log(`Initialized ${peopleEntities.length} people`)
+    if (people.next) {
+      this.loadPeople(people.next)
+    }
+    return peopleEntities.length
 
-    console.log("Initializing species..")
-    const speciesEntities = await Promise.all(species.map(async (data: any) => {
+  }
+
+  async loadSpecies(url: string) {
+    const species = await axios.get(url, { httpsAgent: this.agent }).then(response => response.data)
+
+    const speciesEntities = await Promise.all(species.results.map(async (data: any) => {
       const specie = new Specie()
 
       const homeworld = await this.planetsRepository.findOneBy({
@@ -131,14 +172,12 @@ export class DataLoaderService implements OnApplicationBootstrap {
       Object.assign(specie, data, { homeworld })
       return this.speciesRepository.save(specie)
     }))
+    if (species.next) {
+      this.loadSpecies(species.next)
+    }
 
-    console.log(`Initialized ${speciesEntities.length} species`)
-
-    console.log("Creating admin role")
-    const admin = new User()
-    Object.assign(admin, { name: "loh", password: "loh", email: "loh", role: "ADMIN" })
-    this.userRepository.save(admin)
-    console.log("Admin created")
+    return speciesEntities.length
   }
+
 }
 

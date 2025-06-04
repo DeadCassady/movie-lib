@@ -28,7 +28,6 @@ export class AuthService {
     if (!user) throw new NotFoundException("User not found")
     if (user.password === password) {
       const { password, ...result } = user;
-      console.log(result)
       return this.jwtService.sign(result)
     } else {
       throw new HttpException("Invalid credentials", 401)
