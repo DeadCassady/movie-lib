@@ -57,15 +57,17 @@ export class VehiclesService {
   }
 
   async findAll() {
-    const vehicles = await this.vehicleRepository.find({}).then((data) => {
-      return data.slice(data.length - 10, data.length)
-    })
-
-    return vehicles;
+    const entities = await this.vehicleRepository.find()
+    const bounds = [entities.length - 10, entities.length]
+    return entities.slice(bounds[0], bounds[1])
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} vehicle`;
+  async findOne(id: number) {
+    const vehicle = await this.vehicleRepository.findOneBy({ id });
+    if (!vehicle) {
+      throw new NotFoundException(`vehicle with ID ${id} not found`);
+    }
+    return vehicle;
   }
 
   async update(id: number, updateVehicleDto: UpdateVehicleDto) {

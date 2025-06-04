@@ -6,7 +6,6 @@ import { Starship } from './entities/starship.entity';
 import { Repository } from 'typeorm';
 import { TransformStarshipDto } from './dto/transform-starship.dto';
 import { Person } from '../people/entities/person.entity';
-import { Film } from '../films/entities/film.entity';
 
 @Injectable()
 export class StarshipsService {
@@ -54,8 +53,10 @@ export class StarshipsService {
     }
   }
 
-  findAll(): Promise<Starship[]> {
-    return this.starshipsRepository.find();
+  async findAll(): Promise<Starship[]> {
+    const entities = await this.starshipsRepository.find()
+    const bounds = [entities.length - 10, entities.length]
+    return entities.slice(bounds[0], bounds[1])
   }
 
   async findOne(id: number): Promise<Starship> {

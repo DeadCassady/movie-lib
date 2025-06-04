@@ -54,8 +54,10 @@ export class PlanetsService {
     }
   }
 
-  findAll(): Promise<Planet[]> {
-    return this.planetsRepository.find();
+  async findAll(): Promise<Planet[]> {
+    const entities = await this.planetsRepository.find()
+    const bounds = [entities.length - 10, entities.length]
+    return entities.slice(bounds[0], bounds[1])
   }
 
   async findOne(id: number): Promise<Planet> {

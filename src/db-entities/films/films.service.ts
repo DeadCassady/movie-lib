@@ -102,8 +102,10 @@ export class FilmsService {
     }
   }
 
-  findAll() {
-    return this.peopleRepository.find();
+  async findAll() {
+    const entities = await this.filmsRepository.find()
+    const bounds = [entities.length - 10, entities.length]
+    return entities.slice(bounds[0], bounds[1])
   }
 
   async findOne(id: number): Promise<Film> {

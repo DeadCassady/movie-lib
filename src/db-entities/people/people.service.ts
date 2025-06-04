@@ -99,9 +99,10 @@ export class PeopleService {
   }
 
 
-  findAll(): Promise<Person[]> {
-
-    return this.peopleRepository.find();
+  async findAll(): Promise<Person[]> {
+    const entities = await this.peopleRepository.find()
+    const bounds = [entities.length - 10, entities.length]
+    return entities.slice(bounds[0], bounds[1])
   }
 
   async findOne(id: number): Promise<Person> {

@@ -68,12 +68,18 @@ export class SpeciesService {
     }
   }
 
-  findAll() {
-    return `This action returns all species`;
+  async findAll() {
+    const entities = await this.speciesRepository.find()
+    const bounds = [entities.length - 10, entities.length]
+    return entities.slice(bounds[0], bounds[1])
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} species`;
+  async findOne(id: number) {
+    const specie = await this.speciesRepository.findOneBy({ id });
+    if (!specie) {
+      throw new NotFoundException(`specie with ID ${id} not found`);
+    }
+    return specie;
   }
 
   async update(id: number, updateSpeciesDto: UpdateSpeciesDto) {
