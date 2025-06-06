@@ -16,11 +16,11 @@ import { CreatePersonDto } from './dto/create-person.dto';
 import { UpdatePersonDto } from './dto/update-person.dto';
 import { ApiBearerAuth, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Person } from './entities/person.entity';
-import { CustomInterceptors } from 'src/interceptors/custom.interceptors';
-import { Roles } from 'src/decorators/roles.decorator';
-import { Role } from 'src/users/roles/roles.enum';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { RolesGuard } from 'src/auth/roles.guard';
+import { CustomInterceptors } from '../../interceptors/custom.interceptors';
+import { Roles } from '../../decorators/roles.decorator';
+import { Role } from '../../users/roles/roles.enum';
+import { JwtAuthGuard } from '../../auth/jwt-auth.guard';
+import { RolesGuard } from '../../auth/roles.guard';
 
 @ApiTags('People')
 @UseGuards(JwtAuthGuard, RolesGuard)

@@ -16,11 +16,11 @@ import { CreatePlanetDto } from './dto/create-planet.dto';
 import { UpdatePlanetDto } from './dto/update-planet.dto';
 import { ApiBearerAuth, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Planet } from './entities/planet.entity';
-import { CustomInterceptors } from 'src/interceptors/custom.interceptors';
-import { Roles } from 'src/decorators/roles.decorator';
-import { Role } from 'src/users/roles/roles.enum';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { RolesGuard } from 'src/auth/roles.guard';
+import { CustomInterceptors } from '../../interceptors/custom.interceptors';
+import { Roles } from '../../decorators/roles.decorator';
+import { Role } from '../../users/roles/roles.enum';
+import { JwtAuthGuard } from '../../auth/jwt-auth.guard';
+import { RolesGuard } from '../../auth/roles.guard';
 
 @ApiTags('Planets')
 @UseGuards(JwtAuthGuard, RolesGuard)

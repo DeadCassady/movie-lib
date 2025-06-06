@@ -4,12 +4,12 @@ import { CreateFilmDto } from './dto/create-film.dto';
 import { UpdateFilmDto } from './dto/update-film.dto';
 import { ApiBearerAuth, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Film } from './entities/film.entity';
-import { CustomInterceptors } from 'src/interceptors/custom.interceptors';
-import { Public } from 'src/decorators/public.decorator';
-import { Roles } from 'src/decorators/roles.decorator';
-import { Role } from 'src/users/roles/roles.enum';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { RolesGuard } from 'src/auth/roles.guard';
+import { CustomInterceptors } from '../../interceptors/custom.interceptors';
+import { Public } from '../../decorators/public.decorator';
+import { Roles } from '../../decorators/roles.decorator';
+import { Role } from '../../users/roles/roles.enum';
+import { JwtAuthGuard } from '../../auth/jwt-auth.guard';
+import { RolesGuard } from '../../auth/roles.guard';
 
 @ApiTags("Films")
 @UseGuards(JwtAuthGuard, RolesGuard)

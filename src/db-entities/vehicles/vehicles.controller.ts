@@ -3,12 +3,12 @@ import { CreateVehicleDto } from './dto/create-vehicle.dto';
 import { UpdateVehicleDto } from './dto/update-vehicle.dto';
 import { ApiBearerAuth, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Vehicle } from './entities/vehicle.entity';
-import { CustomInterceptors } from 'src/interceptors/custom.interceptors';
-import { Roles } from 'src/decorators/roles.decorator';
+import { CustomInterceptors } from '../../interceptors/custom.interceptors';
+import { Roles } from '../../decorators/roles.decorator';
 import { VehiclesService } from './vehicles.service';
-import { Role } from 'src/users/roles/roles.enum';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { RolesGuard } from 'src/auth/roles.guard';
+import { Role } from '../../users/roles/roles.enum';
+import { JwtAuthGuard } from '../../auth/jwt-auth.guard';
+import { RolesGuard } from '../../auth/roles.guard';
 
 @ApiTags('vehicles')
 @Controller('vehicles')

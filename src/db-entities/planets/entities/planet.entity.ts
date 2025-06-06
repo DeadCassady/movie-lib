@@ -1,9 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Image } from 'src/image-upload/entities/image.entity'
+import { Image } from '../../../image-upload/entities/image.entity'
 import { Expose } from 'class-transformer';
 import { AfterLoad, Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { Film } from 'src/db-entities/films/entities/film.entity';
-import { Person } from 'src/db-entities/people/entities/person.entity';
+import { Film } from '../../films/entities/film.entity';
+import { Person } from '../../people/entities/person.entity';
 
 const url = 'http://localhost:3000/api#/planets/'
 

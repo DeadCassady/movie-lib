@@ -3,14 +3,13 @@ import { InjectRepository } from "@nestjs/typeorm";
 import axios from "axios";
 import { Repository } from "typeorm";
 import { https } from "follow-redirects";
-import { User } from "src/users/entities/user.entity";
-import { Person } from "src/db-entities/people/entities/person.entity";
-import { Film } from "src/db-entities/films/entities/film.entity";
-import { Planet } from "src/db-entities/planets/entities/planet.entity";
-import { Specie } from "src/db-entities/species/entities/species.entity";
-import { Starship } from "src/db-entities/starships/entities/starship.entity";
-import { Vehicle } from "src/db-entities/vehicles/entities/vehicle.entity";
-import { response } from "express";
+import { User } from "../users/entities/user.entity";
+import { Person } from "../db-entities/people/entities/person.entity";
+import { Film } from "../db-entities/films/entities/film.entity";
+import { Planet } from "../db-entities/planets/entities/planet.entity";
+import { Specie } from "../db-entities/species/entities/species.entity";
+import { Starship } from "../db-entities/starships/entities/starship.entity";
+import { Vehicle } from "../db-entities/vehicles/entities/vehicle.entity";
 
 @Injectable()
 export class DataLoaderService implements OnApplicationBootstrap {

@@ -3,12 +3,12 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { CreateImageDto } from "../dto/create-image.dto";
 import { Image } from "../entities/image.entity"
-import { Planet } from "src/db-entities/planets/entities/planet.entity";
-import { Film } from "src/db-entities/films/entities/film.entity";
-import { Specie } from "src/db-entities/species/entities/species.entity";
-import { Person } from "src/db-entities/people/entities/person.entity";
-import { Vehicle } from "src/db-entities/vehicles/entities/vehicle.entity";
-import { Starship } from "src/db-entities/starships/entities/starship.entity";
+import { Planet } from "../../db-entities/planets/entities/planet.entity";
+import { Film } from "../../db-entities/films/entities/film.entity";
+import { Specie } from "../../db-entities/species/entities/species.entity";
+import { Person } from "../../db-entities/people/entities/person.entity";
+import { Vehicle } from "../../db-entities/vehicles/entities/vehicle.entity";
+import { Starship } from "../../db-entities/starships/entities/starship.entity";
 
 @Injectable()
 export class ImageService {

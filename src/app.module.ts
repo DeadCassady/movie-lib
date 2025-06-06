@@ -3,12 +3,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataLoaderModule } from './data-loader/data-loader.module';
 import { ImageModule } from './image-upload/image.module';
 import { AuthModule } from './auth/auth.module';
-import { PeopleModule } from './db-entities/people/people.module';
-import { PlanetsModule } from './db-entities/planets/planets.module';
-import { StarshipsModule } from './db-entities/starships/starships.module';
-import { FilmsModule } from './db-entities/films/films.module';
-import { VehiclesModule } from './db-entities/vehicles/vehicles.module';
-import { SpeciesModule } from './db-entities/species/species.module';
+import { UsersModule } from './users/users.module';
+import { SwapiModule } from './db-entities/swapi.module';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 
 @Module({
   imports: [
@@ -23,14 +21,12 @@ import { SpeciesModule } from './db-entities/species/species.module';
       dropSchema: true
     }),
     AuthModule,
-    PeopleModule,
-    PlanetsModule,
-    StarshipsModule,
-    FilmsModule,
-    VehiclesModule,
-    SpeciesModule,
+    UsersModule,
     DataLoaderModule,
     ImageModule,
+    SwapiModule
   ],
+  controllers: [AppController],
+  providers: [AppService]
 })
 export class AppModule { }

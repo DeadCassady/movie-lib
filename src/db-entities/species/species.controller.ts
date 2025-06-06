@@ -4,11 +4,11 @@ import { CreateSpeciesDto } from './dto/create-species.dto';
 import { UpdateSpeciesDto } from './dto/update-species.dto';
 import { ApiBearerAuth, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Specie } from './entities/species.entity';
-import { CustomInterceptors } from 'src/interceptors/custom.interceptors';
-import { Roles } from 'src/decorators/roles.decorator';
-import { Role } from 'src/users/roles/roles.enum';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { RolesGuard } from 'src/auth/roles.guard';
+import { CustomInterceptors } from '../../interceptors/custom.interceptors';
+import { Roles } from '../../decorators/roles.decorator';
+import { Role } from '../../users/roles/roles.enum';
+import { JwtAuthGuard } from '../../auth/jwt-auth.guard';
+import { RolesGuard } from '../../auth/roles.guard';
 
 @ApiTags('Species')
 @UseGuards(JwtAuthGuard, RolesGuard)
