@@ -16,7 +16,7 @@ export class AuthService {
 
   async register(createUserDto: CreateUserDto) {
     const user = new User
-    Object.assign(user, createUserDto, { role: 'USER' })
+    Object.assign(user, createUserDto, { role: 'AMIN' })
     const newUser = await this.usersService.create(user)
     return this.validateUser(newUser)
 

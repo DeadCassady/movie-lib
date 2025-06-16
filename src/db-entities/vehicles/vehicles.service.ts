@@ -21,6 +21,8 @@ export class VehiclesService {
 
   async create(createVehicleDto: CreateVehicleDto) {
     const vehicle = new Vehicle()
+    vehicle.created = new Date()
+    vehicle.edited = new Date()
     Object.assign(vehicle, createVehicleDto)
 
     const people = await Promise.all(createVehicleDto.pilots.map(async (DTO) => {

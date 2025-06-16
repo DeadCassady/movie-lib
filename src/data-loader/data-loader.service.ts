@@ -67,8 +67,8 @@ export class DataLoaderService implements OnApplicationBootstrap {
     console.log("Creating admin role")
     const admin = new User()
     Object.assign(admin, { name: "loh", password: "loh", email: "loh", role: "ADMIN" })
-    this.userRepository.save(admin)
-    console.log("Admin created")
+    await this.userRepository.save(admin)
+    // console.log("Admin created")
   }
 
   async loadVehicles(url: string) {

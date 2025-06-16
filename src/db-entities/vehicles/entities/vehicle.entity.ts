@@ -70,7 +70,7 @@ export class Vehicle {
   edited: Date;
   @ApiProperty({ description: 'This is the url of the vehicle', nullable: false })
   @Expose()
-  @Column()
+  @Column({ nullable: true })
   url: string;
   @AfterLoad()
   generateUrl() {

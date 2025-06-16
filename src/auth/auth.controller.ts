@@ -5,7 +5,7 @@ import { AuthService } from "./auth.service";
 import { JwtAuthGuard } from "./jwt-auth.guard";
 
 @ApiTags("Auth")
-@Controller()
+@Controller("api")
 export class AuthController {
 
   constructor(private authService: AuthService) { }

@@ -1,3 +1,7 @@
+#RUN THE MIGRATIONS
+
+npm run migration:run
+
 #LAUNCH DOCKER
 
 docker-compose up -d

@@ -45,10 +45,4 @@ export class CreatePersonDto {
   @IsArray()
   @IsString({ each: true })
   readonly starships: string[];
-  @ApiProperty({ description: 'Note identifier', nullable: false })
-  @IsDate()
-  readonly created: Date;
-  @ApiProperty({ description: 'Note identifier', nullable: false })
-  @IsDate()
-  readonly edited: Date;
 }

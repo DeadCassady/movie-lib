@@ -30,6 +30,7 @@ async function bootstrap() {
       defaultModelExpandDepth: 3,
     },
   });
+  app.enableCors()
   app.useGlobalFilters(new GlobalExceptionFilter)
   await app.listen(process.env.PORT ?? 3000);
 }

@@ -7,18 +7,29 @@ import { UsersModule } from './users/users.module';
 import { SwapiModule } from './db-entities/swapi.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      port: 5432,
-      username: 'postgres',
-      password: 'password',
-      database: 'movie_lib',
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      synchronize: true,
-      dropSchema: true
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => ({
+        type: 'postgres',
+        host: configService.get('DATABASE_HOST'),
+        port: configService.get('DATABASE_PORT'),
+        username: configService.get('DATABASE_USER'),
+        password: configService.get('DATABASE_PASSWORD'),
+        database: configService.get('DATABASE_DB'),
+        entities: [__dirname + '/**/*.entity{.ts,.js}'],
+        synchronize: false,
+        dropSchema: false,
+        seeds: ["src/database/seeding/**/*{.ts,.js}"],
+        migrations: [__dirname + '/database/migrations/**/*{.ts,.js}'],
+        cli: {
+          migrationsDir: __dirname + '/migrations/'
+        },
+      }),
+      inject: [ConfigService]
     }),
     AuthModule,
     UsersModule,

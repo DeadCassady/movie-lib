@@ -43,10 +43,4 @@ export class CreateVehicleDto {
   @IsArray()
   @IsString()
   films: string[];
-  @ApiProperty({ description: 'This is when the vehicle was created', nullable: false })
-  @IsDate()
-  created: Date;
-  @ApiProperty({ description: 'This is when the vehicle was edited', nullable: false })
-  @IsDate()
-  edited: Date;
 }
