@@ -12,7 +12,4 @@ export class CreateUserDto {
   @ApiProperty({ description: 'Note identifier', nullable: false })
   @IsString()
   email: string;
-  @ApiProperty({ description: 'The role of the user', nullable: true })
-  @IsString()
-  role?: Role
 }

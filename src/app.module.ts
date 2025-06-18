@@ -23,7 +23,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         entities: [__dirname + '/**/*.entity{.ts,.js}'],
         synchronize: false,
         dropSchema: false,
-        seeds: ["src/database/seeding/**/*{.ts,.js}"],
         migrations: [__dirname + '/database/migrations/**/*{.ts,.js}'],
         cli: {
           migrationsDir: __dirname + '/migrations/'

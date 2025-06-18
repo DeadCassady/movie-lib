@@ -30,7 +30,7 @@ export class DataLoaderService implements OnApplicationBootstrap {
     private readonly userRepository: Repository<User>
   ) { }
   async onApplicationBootstrap() {
-    await this.loadAllData()
+    //   // await this.loadAllData()
   }
 
   agent = new https.Agent({

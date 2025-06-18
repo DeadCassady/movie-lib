@@ -8,7 +8,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const swaggerConfig = new DocumentBuilder()
     .setTitle('My swapi implementation') // The name of the api
-    .setDescription(`It's an API for navigating a movie library`) // The description
+    .setDescription(`It's an API for navigating a Star Wars themed movie library`) // The description
     .setVersion('1.0') // The version
     .addTag('SWAPI Movie Library') // Теги для групування ендпоінтів
     .addBearerAuth({

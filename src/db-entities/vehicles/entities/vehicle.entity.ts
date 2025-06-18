@@ -54,14 +54,14 @@ export class Vehicle {
   vehicle_class: string;
   @ApiProperty({ description: 'Note identifier', nullable: false })
   @ManyToMany(() => Person, (person) => person.vehicles)
-  pilots: Person[];
+  pilots?: Person[];
   @ApiProperty({ description: 'This is the array of films', nullable: false })
   @ManyToMany(() => Film, (film) => film.vehicles)
-  films: Film[];
+  films?: Film[];
   @ApiProperty({ description: 'This is the array of images', nullable: false })
   @ManyToMany(() => Image, (image) => image.vehicle)
   @JoinTable()
-  images: Image[];
+  images?: Image[];
   @ApiProperty({ description: 'This is when the vehicle was created', nullable: false })
   @Column()
   created: Date;

@@ -10,7 +10,7 @@ import { Role } from '../../users/roles/roles.enum';
 import { JwtAuthGuard } from '../../auth/jwt-auth.guard';
 import { RolesGuard } from '../../auth/roles.guard';
 
-@ApiTags('vehicles')
+@ApiTags('Vehicles')
 @Controller('vehicles')
 @UseGuards(JwtAuthGuard, RolesGuard)
 @ApiBearerAuth('JWT-auth')
