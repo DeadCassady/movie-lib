@@ -33,6 +33,6 @@ export class AuthController {
   @ApiResponse({ status: HttpStatus.OK, description: 'Success' })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Bad Request' })
   getProfile(@Req() req: Request) {
-    return this.authService.getUsers()
+    return this.authService.getUsers();
   }
 }

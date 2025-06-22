@@ -29,10 +29,10 @@ export class Specie {
   @ApiProperty({ description: "This is the specie's classification", nullable: false })
   @Column()
   classification: string
-  @ApiProperty({ description: 'This is the homeworld of the specie', nullable: false })
+  @ApiProperty({ description: 'This is the homeworld of the specie', nullable: true })
   @ManyToOne(() => Planet, { nullable: true })
   @JoinColumn()
-  homeworld: Planet | null;
+  homeworld?: Planet | null
   @ApiProperty({ description: "This is the specie's language", nullable: false })
   @Column()
   language: string;

@@ -94,6 +94,8 @@ export class FilmsService {
       })
     }))
 
+    film.created = new Date()
+    film.edited = new Date()
     try {
       Object.assign(film, { planets, vehicles, starships, species, characters })
       return this.filmsRepository.save(film);

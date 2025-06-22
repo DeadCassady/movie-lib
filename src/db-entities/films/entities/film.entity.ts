@@ -27,7 +27,7 @@ export class Film {
   title: string;
   @ApiProperty({ description: "This is the film's episode id", nullable: false })
   @Column()
-  episode_id: number;
+  episode_id: string;
   @ApiProperty({ description: "This is the film's opening crawl", nullable: false })
   @Column()
   opening_crawl: string;
@@ -72,7 +72,7 @@ export class Film {
   edited: Date;
   @ApiProperty({ description: 'This is a url of the film', nullable: false })
   @Expose()
-  @Column()
+  @Column({ nullable: true })
   url: string;
   @AfterLoad()
   generateUrl() {

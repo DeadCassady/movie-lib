@@ -5,6 +5,7 @@ import { ConfigService } from "@nestjs/config";
 import { symlink, writeFile } from "fs";
 import { ensureDir, remove } from "fs-extra";
 import path, { join } from "path";
+import { catchError } from "rxjs";
 import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
@@ -23,12 +24,10 @@ export class FileStorage {
       throw new Error("aws region wasn't found in .env")
     }
 
-
     this.client = new S3Client({
       region: s3_region,
     })
   }
-
 
   async saveFileToS3(filename: string, file: Buffer) {
     await this.client.send(
@@ -42,27 +41,35 @@ export class FileStorage {
   }
 
   async saveFile(file: Express.Multer.File): Promise<{ filename: string; originalName: string }> {
-    ensureDir(this.uploadDir); // Створити папку, якщо її немає
+    try {
+      ensureDir(this.uploadDir);
 
-    const filename = `${uuidv4()}${path}.jpeg`;
-    const filePath = join(this.uploadDir, filename);
+      const filename = `${uuidv4()}${path}.jpeg`;
+      const filePath = join(this.uploadDir, filename);
 
-    writeFile(filePath, file.buffer, () => { }); // Зберегти файл
+      writeFile(filePath, file.buffer, () => { });
 
-    return { filename, originalName: file.originalname };
+      return { filename, originalName: file.originalname };
+    } catch (error) {
+      throw new error
+    }
   }
 
   async deleteFile(filename: string): Promise<void> {
     const filePath = join(this.uploadDir, filename);
-    await remove(filePath); // Видалити файл
+    await remove(filePath);
   }
 
   async createSymlink(filename: string): Promise<string> {
-    ensureDir(this.publicDir);
-    const symlinkPath = join(this.publicDir, filename);
-    const targetPath = join(this.uploadDir, filename);
+    try {
+      ensureDir(this.publicDir);
+      const symlinkPath = join(this.publicDir, filename);
+      const targetPath = join(this.uploadDir, filename);
 
-    symlink(targetPath, symlinkPath, () => { }); // Створити symlink
-    return symlinkPath;
+      symlink(targetPath, symlinkPath, () => { });
+      return symlinkPath;
+    } catch (error) {
+      throw new error
+    }
   }
 }

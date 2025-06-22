@@ -13,7 +13,7 @@ describe('PeopleController (e2e)', () => {
   let userRepository: Repository<User>
 
   beforeAll(async () => {
-    // jest.setTimeout(1000000000)
+    jest.setTimeout(1000000000)
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();

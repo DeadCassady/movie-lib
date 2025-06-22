@@ -92,7 +92,6 @@ export class CreateSchema1750072494413 implements MigrationInterface {
     await queryRunner.query(`ALTER TABLE "film_images_image" ADD CONSTRAINT "FK_7ca4abe9bcf237e1e1718076dcf" FOREIGN KEY ("filmId") REFERENCES "film"("id") ON DELETE CASCADE ON UPDATE CASCADE`);
     await queryRunner.query(`ALTER TABLE "film_images_image" ADD CONSTRAINT "FK_28cb826698439437bc28b76aa9c" FOREIGN KEY ("imageId") REFERENCES "image"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
 
-    console.log('Migrations ran successfully')
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
@@ -183,7 +182,6 @@ export class CreateSchema1750072494413 implements MigrationInterface {
     await queryRunner.query(`DROP TABLE "vehicle"`);
     await queryRunner.query(`DROP TABLE "user"`);
 
-    console.log('The migrations had been reverted')
   }
 
 }

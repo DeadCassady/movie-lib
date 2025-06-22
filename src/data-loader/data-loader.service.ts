@@ -10,6 +10,8 @@ import { Planet } from "../db-entities/planets/entities/planet.entity";
 import { Specie } from "../db-entities/species/entities/species.entity";
 import { Starship } from "../db-entities/starships/entities/starship.entity";
 import { Vehicle } from "../db-entities/vehicles/entities/vehicle.entity";
+import { CreateSpeciesDto } from "src/db-entities/species/dto/create-species.dto";
+import { CreatePersonDto } from "src/db-entities/people/dto/create-person.dto";
 
 @Injectable()
 export class DataLoaderService implements OnApplicationBootstrap {
@@ -30,7 +32,7 @@ export class DataLoaderService implements OnApplicationBootstrap {
     private readonly userRepository: Repository<User>
   ) { }
   async onApplicationBootstrap() {
-    //   // await this.loadAllData()
+    await this.loadAllData()
   }
 
   agent = new https.Agent({
@@ -45,30 +47,22 @@ export class DataLoaderService implements OnApplicationBootstrap {
     const peopleUrl = 'https://swapi.dev/api/people/?page=1'
     const speciesUrl = 'https://swapi.dev/api/species/?page=1'
 
-    console.log("Initializing vehicles..")
     await this.loadVehicles(vehiclesUrl)
 
-    console.log("Initializing films..")
     await this.loadFilms(filmsUrl)
 
-    console.log("Initializing starships..")
     await this.loadStarships(starshipsUrl)
 
-    console.log("Initializing planets..")
     await this.loadPlanets(planetsUrl)
 
-    console.log("Initializing people..")
     await this.loadPeople(peopleUrl)
 
-    console.log("Initializing species..")
     await this.loadSpecies(speciesUrl)
 
 
-    console.log("Creating admin role")
     const admin = new User()
-    Object.assign(admin, { name: "loh", password: "loh", email: "loh", role: "ADMIN" })
+    Object.assign(admin, { name: "string", password: "string", email: "string", role: "ADMIN" })
     await this.userRepository.save(admin)
-    // console.log("Admin created")
   }
 
   async loadVehicles(url: string) {
@@ -130,19 +124,14 @@ export class DataLoaderService implements OnApplicationBootstrap {
   async loadPeople(url: string) {
     const people = await axios.get(url, { httpsAgent: this.agent }).then(response => response.data)
 
-    const peopleEntities = await Promise.all(people.results.map(async (data: any) => {
-      const person = new Person()
-
+    const peopleEntities = await Promise.all(people.results.map(async (data: CreatePersonDto) => {
+      const person: Person = new Person()
       const homeworld = await this.planetsRepository.findOneBy({
         url: data.homeworld
-      }).then(data => {
-        if (data) {
-          return data
-        } else {
-          return null
-        }
-      })
+      }) || null
+
       Object.assign(person, data, { homeworld })
+
       return this.personRepository.save(person)
     }))
     if (people.next) {
@@ -155,20 +144,14 @@ export class DataLoaderService implements OnApplicationBootstrap {
   async loadSpecies(url: string) {
     const species = await axios.get(url, { httpsAgent: this.agent }).then(response => response.data)
 
-    const speciesEntities = await Promise.all(species.results.map(async (data: any) => {
-      const specie = new Specie()
-
+    const speciesEntities = await Promise.all(species.results.map(async (data: CreateSpeciesDto) => {
+      const specie: Specie = new Specie()
       const homeworld = await this.planetsRepository.findOneBy({
         url: data.homeworld
-      }).then(data => {
-        if (data) {
-          return data
-        } else {
-          return null
-        }
-      })
+      }) || null
 
       Object.assign(specie, data, { homeworld })
+
       return this.speciesRepository.save(specie)
     }))
     if (species.next) {

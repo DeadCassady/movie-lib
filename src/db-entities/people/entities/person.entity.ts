@@ -50,7 +50,7 @@ export class Person {
   @ApiProperty({ description: 'A home planet', nullable: false })
   @ManyToOne(() => Planet, (planet) => planet.residents,
     { nullable: true })
-  homeworld?: Planet | null;
+  homeworld: Planet | null;
   @ApiProperty({ description: 'This is the films that the person has been in', nullable: false })
   @ManyToMany(() => Film, (film) => film.characters, { cascade: true })
   films?: Film[];

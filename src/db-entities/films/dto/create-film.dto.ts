@@ -40,10 +40,4 @@ export class CreateFilmDto {
   @IsArray()
   @IsString()
   species: string[];
-  @ApiProperty({ description: 'This is when the this is when the entry was created', nullable: false })
-  @IsDate()
-  created: Date;
-  @ApiProperty({ description: 'This is when the entry was changed', nullable: false })
-  @IsDate()
-  edited: Date;
 }

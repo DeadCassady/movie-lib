@@ -30,9 +30,7 @@ export class PeopleService {
 
   async create(createPersonDto: CreatePersonDto) {
     const person = new Person();
-    person.created = new Date()
 
-    Object.assign(person, createPersonDto)
     const planet = await this.planetRepository.findOne({
       where: { name: createPersonDto.homeworld }
     }).then((data) => {
@@ -90,8 +88,10 @@ export class PeopleService {
         }
       })
     }))
+    person.edited = new Date()
+    person.created = new Date()
     try {
-      Object.assign(person, { homeworld: planet, vehicles, starships, species, films })
+      Object.assign(person, createPersonDto, { homeworld: planet, species, films, starships, vehicles })
       return this.peopleRepository.save(person);
     } catch (error) {
       throw new InternalServerErrorException("Failed to create a new person")
@@ -202,7 +202,7 @@ export class PeopleService {
   async remove(id: number): Promise<void> {
     const result = await this.peopleRepository.delete(id);
     if (result.affected === 0) {
-      throw new NotFoundException(`person with ID ${id} not found`);
+      throw new NotFoundException(`perso} not found`);
     }
   }
 }
